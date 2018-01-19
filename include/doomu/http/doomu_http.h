@@ -1,3 +1,6 @@
+#ifndef DOOMU_HTTP_H
+#define DOOMU_HTTP_H
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -28,3 +31,5 @@ void get(string url, DoomUResponse *response);
 
 void post(string url, string params, DoomUResponse *response);
 
+
+#endif

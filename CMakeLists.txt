@@ -3,10 +3,10 @@ project(doomU)
 
 set(CMAKE_CXX_STANDARD 11)
 
-file(GLOB project_sources src/doomu/*.[c-h])
+file(GLOB project_sources src/doomu/*/*.c include/doomu/*/*.h)
 set(SOURCE_FILES ${project_sources})
 
-file(GLOB project_tests test/doomu/*.*pp test/Catch/catch.hpp)
+file(GLOB project_tests test/doomu/*/*.*pp test/Catch/catch.hpp)
 set(TEST_FILES ${project_tests})
 
 
