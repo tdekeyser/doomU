@@ -1,10 +1,10 @@
 #define CATCH_CONFIG_MAIN
 
-#include "../../Catch/catch.hpp"
+#include "../Catch/catch.hpp"
 
 #include <stdlib.h>
 #include <string.h>
-#include "../../../src/doomu/http/doomu_http.c"
+#include "../../src/http/http.c"
 
 TEST_CASE("doomU http") {
 

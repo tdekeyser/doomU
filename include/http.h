@@ -1,10 +1,10 @@
 #ifndef DOOMU_HTTP_H
 #define DOOMU_HTTP_H
 
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 
-typedef const char * string;
 
 typedef struct write_buffer {
     char *memory;
@@ -32,4 +32,4 @@ void get(string url, DoomUResponse *response);
 void post(string url, string params, DoomUResponse *response);
 
 
-#endif
+#endif /* DOOMU_HTTP_H */
