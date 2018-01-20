@@ -11,14 +11,20 @@ set(TEST_FILES ${project_tests})
 
 
 #### Dependencies ####
-
 set(CURL_LIBRARY "-lcurl")
 find_package(CURL REQUIRED)
 
-####
 
-# Create executable for testing purposes
-#add_executable(run_all_tests ${SOURCE_FILES})
-add_executable(run_all_tests ${SOURCE_FILES} ${TEST_FILES})
+#### Build executable
+option(SOURCE "Only builds executable with source files." OFF)
+option(TEST "Compile all tests and build executable that runs all tests." OFF)
 
-target_link_libraries(run_all_tests ${CURL_LIBRARY})
+if (SOURCE)
+    add_executable(doomU ${SOURCE_FILES})
+    target_link_libraries(doomU ${CURL_LIBRARY})
+endif()
+if (TEST) # Create executable for testing purposes
+    add_executable(doomU_test ${SOURCE_FILES} ${TEST_FILES})
+    target_link_libraries(doomU_test ${CURL_LIBRARY})
+endif()
+
