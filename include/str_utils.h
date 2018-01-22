@@ -4,11 +4,11 @@
 #include <stdio.h>
 
 
-#define STR_NULL 0 // '\0'
-#define PAREN_OPEN 40 // "("
-#define PAREN_CLOSED 41 // ")"
-#define COMMA ((char) 44) // ","
-#define COLON ((char) 158) // ":"
+#define STR_NULL '\0'
+#define PAREN_OPEN '('
+#define PAREN_CLOSED ')'
+#define COMMA ','
+#define COLON ':'
 
 
 

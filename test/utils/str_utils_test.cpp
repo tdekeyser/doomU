@@ -59,16 +59,25 @@ TEST_CASE("split") {
         }
     }
 
-//    SECTION("returns one element if no delimiter in string") {
-//        char another_string[] = "guitars are nice";
-//        string another_split_string[] = {"guitars are nice"};
-//
-//        char *actual[1];
-//
-//        split(COMMA, another_string, actual);
-//
-//        REQUIRE(strcmp(actual[0], another_split_string[0]) == 0);
-//    }
+    SECTION("returns one element if no delimiter in string") {
+        char another_string[] = "guitars are nice";
+        string another_split_string[] = {"guitars are nice"};
+
+        char *actual[1];
+
+        split(COMMA, another_string, actual);
+
+        REQUIRE(strcmp(actual[0], another_split_string[0]) == 0);
+    }
+
+    SECTION("returns number of split elements") {
+        char a_string[] = "guitar, drums, keyboards";
+        char *actual[3];
+
+        size_t num_splits = split(COMMA, a_string, actual);
+
+        REQUIRE(num_splits == 3);
+    }
 
 }
 
