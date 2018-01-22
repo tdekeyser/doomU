@@ -5,7 +5,7 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
-#include "utils.h"
+#include "str_utils.h"
 #include <stdlib.h>
 
 

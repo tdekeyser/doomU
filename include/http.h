@@ -1,7 +1,7 @@
 #ifndef DOOMU_HTTP_H
 #define DOOMU_HTTP_H
 
-#include "utils.h"
+#include "str_utils.h"
 #include <stdlib.h>
 #include <string.h>
 
