@@ -8,20 +8,15 @@
 #include "utils.h"
 #include <stdlib.h>
 
-typedef struct key_value {
-    string key;
-    void *value;
-} KVPair;
 
 
-typedef struct function_arguments {
-    size_t num;
-    KVPair args[];
-} Args;
+typedef struct function_declaration {
+    char **args;
+    string returnValue;
+} Func;
 
 
-
-
+int lex(string filename, Func *func);
 
 
 
