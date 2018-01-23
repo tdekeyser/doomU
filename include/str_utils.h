@@ -15,12 +15,13 @@
 typedef const char * string;
 
 
-size_t length(string buffer);
+size_t length(string);
 
-size_t slice_until(char limit, string buffer, char *slice);
+size_t slice_until(char limit, char *str, char *slice);
 
 size_t split(char limit, string buffer, char **split);
 
+void strip(char *);
 
 
 #endif /* UTILS_H */

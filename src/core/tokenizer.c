@@ -30,8 +30,7 @@ int lex(string filename, Func *func) {
 void tokenize_arguments(char *buffer, char **args) {
     size_t numArgs = 0;
 
-    char c;
-    while ((c=*buffer++) != PAREN_CLOSED) {
+    while (*buffer++ != PAREN_CLOSED) {
         char arg[VAR_LEN];
         size_t i = slice_until(COMMA, buffer, arg);
         *(args + numArgs) = arg;

@@ -39,13 +39,13 @@ TEST_CASE("slice_until") {
         REQUIRE(i == 20);
     }
 
-    SECTION("does not change input buffer") {
+    SECTION("changes input buffer") {
         string arguments = "argument1, argument2";
         char slice[64];
 
         slice_until(COLON, arguments, slice);
 
-        REQUIRE(strcmp(arguments, "argument1, argument2") == 0);
+        REQUIRE(strcmp(arguments, " argument2") == 0);
     }
 
 }
@@ -93,10 +93,28 @@ TEST_CASE("split") {
 
         split(COMMA, a_string, actual);
 
-        printf("A string: %s\n", a_string);
-        printf("Duplicate: %s\n", a_duplicate);
-
         REQUIRE(strcmp(a_string, a_duplicate) == 0);
+    }
+
+}
+
+
+TEST_CASE("strip") {
+
+    SECTION("removes space and newline characters from string") {
+        char a_string[] = "    full\nof\r whitespace! ";
+        
+        strip(a_string);
+
+        REQUIRE(strcmp(a_string, "fullofwhitespace!") == 0);
+    }
+
+    SECTION("leaves string same if no whitespace") {
+        char another_string[] = "nowhitespace!";
+        
+        strip(another_string);
+
+        REQUIRE(strcmp(another_string, "nowhitespace!") == 0);
     }
 
 }
