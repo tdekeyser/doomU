@@ -29,6 +29,7 @@ void slice_until(char limit, char *str, char *slice) {
     while (*str++ != STR_NULL) {
         *tmp++ = *str;
     }
+    *tmp = STR_NULL;
 }
 
 
@@ -59,6 +60,7 @@ void strip(char *str) {
 
         *tmp++ = *str++;
     }
+    *tmp = STR_NULL;
 }
 // isspace(int) needs cast to expected range for char!
 // https://stackoverflow.com/questions/28654792/what-do-i-need-to-do-so-the-function-isspace-work-in-c

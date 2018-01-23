@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include "../../include/str_utils.h"
 #include "../../include/tokenizer.h"
 #include "config.c"
@@ -13,6 +14,7 @@ int lex(string filename, Func *func) {
     if (file) {
         size_t n_read;
         while ((n_read = fread(buffer, sizeof(char), BUFFER, file)) > 0) {
+            strip(buffer);
             // do something!
         }
 
@@ -28,21 +30,14 @@ int lex(string filename, Func *func) {
 
 
 void tokenize_arguments(char *buffer, char **args) {
-    size_t numArgs = 0;
+    assert(buffer != NULL);
+    assert(args != NULL);
 
-    while (*buffer++ != PAREN_CLOSED) {
-        char arg[VAR_LEN];
-        slice_until(COMMA, buffer, arg);
-    }
+    char arg_str[VAR_LEN * ARG_LEN];
+
+    slice_until(PAREN_CLOSED, buffer, arg_str);
+
+    split(COMMA, arg_str, args);
+
 }
 
-
-
-//int main() {
-//    char **args = (char **) malloc(sizeof(void *) *BUFFER);
-//    char test[] = "(argument1, argument2)";
-//
-//    tokenize_arguments(test, args);
-//
-//    printf("%s", args[0]);
-//}

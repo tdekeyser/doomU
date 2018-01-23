@@ -43,8 +43,6 @@ TEST_CASE("slice_until") {
 
         slice_until(COMMA, arguments, slice);
 
-        printf("%s", arguments);
-
         REQUIRE(strcmp(arguments, " argument2") == 0);
     }
 
@@ -103,10 +101,13 @@ TEST_CASE("strip") {
 
     SECTION("removes space and newline characters from string") {
         char a_string[] = "    full\nof\r whitespace! ";
+        char another[] = " arg2";
         
         strip(a_string);
+        strip(another);
 
         REQUIRE(strcmp(a_string, "fullofwhitespace!") == 0);
+        REQUIRE(strcmp(another, "arg2") == 0);
     }
 
     SECTION("leaves string same if no whitespace") {
