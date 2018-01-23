@@ -22,8 +22,8 @@ size_t slice_until(char limit, string buffer, char *slice) {
 
 size_t split(const char limit, string buffer, char **split) {
     size_t i = 0;
-
-    char *str = strtok((char *) buffer, &limit);
+    char *dup = strdup(buffer);
+    char *str = strtok(dup, &limit);
 
     while (str != NULL) {
         split[i++] = str;
@@ -32,17 +32,14 @@ size_t split(const char limit, string buffer, char **split) {
 
     return i;
 }
-
-
-
 // Alternative for split() which doesn't use strtok()
-//size_t split(const int limit, string buffer, char **split) {
+// size_t split(const char limit, string buffer, char **split) {
 //    size_t n_sliced, i = 0;
 //    char * buffer_copy = strdup(buffer);
-//    char slice[VAR_LEN];
+//    char slice[64];
 //    while ((n_sliced = slice_until(limit, buffer_copy, slice)) > 0) {
 //        split[i++] = strdup(slice);
 //        buffer_copy += n_sliced + 1;
 //    }
-//    return i-1;
-//}
+//    return i;
+// }

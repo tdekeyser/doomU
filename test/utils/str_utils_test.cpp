@@ -26,7 +26,6 @@ TEST_CASE("slice_until") {
         size_t i = slice_until(COMMA, ab, a);
 
         REQUIRE(strcmp(a, "argument1") == 0);
-        REQUIRE(strcmp(ab, "argument1, argument2") == 0);
         REQUIRE(i == 9);
     }
 
@@ -37,8 +36,16 @@ TEST_CASE("slice_until") {
         size_t i = slice_until(COLON, arguments, slice);
 
         REQUIRE(strcmp(slice, "argument1, argument2") == 0);
-        REQUIRE(strcmp(arguments, "argument1, argument2") == 0);
         REQUIRE(i == 20);
+    }
+
+    SECTION("does not change input buffer") {
+        string arguments = "argument1, argument2";
+        char slice[64];
+
+        slice_until(COLON, arguments, slice);
+
+        REQUIRE(strcmp(arguments, "argument1, argument2") == 0);
     }
 
 }
@@ -77,6 +84,19 @@ TEST_CASE("split") {
         size_t num_splits = split(COMMA, a_string, actual);
 
         REQUIRE(num_splits == 3);
+    }
+
+    SECTION("does not change input buffer value") {
+        char a_string[] = "guitar, drums, keyboards";
+        char a_duplicate[] = "guitar, drums, keyboards";
+        char *actual[3];
+
+        split(COMMA, a_string, actual);
+
+        printf("A string: %s\n", a_string);
+        printf("Duplicate: %s\n", a_duplicate);
+
+        REQUIRE(strcmp(a_string, a_duplicate) == 0);
     }
 
 }
