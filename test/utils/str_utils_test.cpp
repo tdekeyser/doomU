@@ -20,30 +20,30 @@ TEST_CASE("length") {
 TEST_CASE("slice_until") {
 
     SECTION("returns string slice from buffer until limit is encountered") {
-        string ab = "argument1, argument2";
+        char ab[] = "argument1, argument2";
         char a[64];
 
-        size_t i = slice_until(COMMA, ab, a);
+        slice_until(COMMA, ab, a);
 
         REQUIRE(strcmp(a, "argument1") == 0);
-        REQUIRE(i == 9);
     }
 
     SECTION("returns string if delimiter is not found") {
-        string arguments = "argument1, argument2";
-        char slice[64];
-
-        size_t i = slice_until(COLON, arguments, slice);
-
-        REQUIRE(strcmp(slice, "argument1, argument2") == 0);
-        REQUIRE(i == 20);
-    }
-
-    SECTION("changes input buffer") {
-        string arguments = "argument1, argument2";
+        char arguments[] = "argument1, argument2";
         char slice[64];
 
         slice_until(COLON, arguments, slice);
+
+        REQUIRE(strcmp(slice, "argument1, argument2") == 0);
+    }
+
+    SECTION("changes input buffer") {
+        char arguments[] = "argument1, argument2";
+        char slice[64];
+
+        slice_until(COMMA, arguments, slice);
+
+        printf("%s", arguments);
 
         REQUIRE(strcmp(arguments, " argument2") == 0);
     }

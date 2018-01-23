@@ -32,10 +32,7 @@ void tokenize_arguments(char *buffer, char **args) {
 
     while (*buffer++ != PAREN_CLOSED) {
         char arg[VAR_LEN];
-        size_t i = slice_until(COMMA, buffer, arg);
-        *(args + numArgs) = arg;
-        numArgs++;
-        buffer += i;
+        slice_until(COMMA, buffer, arg);
     }
 }
 

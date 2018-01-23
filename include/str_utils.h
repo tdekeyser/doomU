@@ -11,13 +11,12 @@
 #define COLON ':'
 
 
-
-typedef const char * string;
+typedef const char *string;
 
 
 size_t length(string);
 
-size_t slice_until(char limit, char *str, char *slice);
+void slice_until(char limit, char *str, char *slice);
 
 size_t split(char limit, string buffer, char **split);
 

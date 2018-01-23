@@ -13,17 +13,22 @@ size_t length(string buffer) {
 }
 
 
-size_t slice_until(char limit, char *str, char *slice) {
+void slice_until(char limit, char *str, char *slice) {
     assert(str != NULL);
     assert(slice != NULL);
 
-    size_t i = 0;
-    while ((str[i] != limit) && (str[i] != STR_NULL)) {
-        slice[i] = str[i];
-        i++;
+    char *tmp = str;
+
+    // assign chars to slice up until limit
+    while ((*str != limit) && (*str != STR_NULL)) {
+        *slice++ = *str++;
     }
-    slice[i] = STR_NULL;
-    return i;
+    *slice = STR_NULL;
+
+    // assign chars to str past limit
+    while (*str++ != STR_NULL) {
+        *tmp++ = *str;
+    }
 }
 
 
@@ -42,17 +47,6 @@ size_t split(const char limit, string buffer, char **split) {
 
     return i;
 }
-// Alternative for split() which doesn't use strtok()
-// size_t split(const char limit, string buffer, char **split) {
-//    size_t n_sliced, i = 0;
-//    char * buffer_copy = strdup(buffer);
-//    char slice[64];
-//    while ((n_sliced = slice_until(limit, buffer_copy, slice)) > 0) {
-//        split[i++] = strdup(slice);
-//        buffer_copy += n_sliced + 1;
-//    }
-//    return i;
-// }
 
 
 void strip(char *str) {
@@ -68,3 +62,4 @@ void strip(char *str) {
 }
 // isspace(int) needs cast to expected range for char!
 // https://stackoverflow.com/questions/28654792/what-do-i-need-to-do-so-the-function-isspace-work-in-c
+
