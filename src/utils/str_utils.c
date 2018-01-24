@@ -4,12 +4,45 @@
 #include "../../include/str_utils.h"
 
 
-size_t length(string buffer) {
-    assert(buffer != NULL);
+size_t length(string str) {
+    assert(str != NULL);
 
     size_t i = 0;
-    while (buffer[i++] != STR_NULL);
+    while (str[i++] != STR_NULL);
     return i-1;
+}
+
+
+bool no_spaces(string str) {
+    assert(str != NULL);
+
+    while (*str != STR_NULL) {
+        if (isspace(*str++))
+            return false;
+    }
+
+    return true;
+}
+
+
+// TODO check if slice_until() can use this function
+size_t skip_until(char limit, char *str) {
+    assert(str != NULL);
+
+    char *tmp = str;
+
+    size_t i = 0;
+    while ((*str != limit) && (*str != STR_NULL)) {
+        str++;
+        i++;
+    }
+
+    while (*str++ != STR_NULL) {
+        *tmp++ = *str;
+    }
+    *tmp = STR_NULL;
+
+    return i;
 }
 
 
@@ -19,7 +52,7 @@ void slice_until(char limit, char *str, char *slice) {
 
     char *tmp = str;
 
-    // assign chars to slice up until limit
+    // assign chars to slice up to limit
     while ((*str != limit) && (*str != STR_NULL)) {
         *slice++ = *str++;
     }
@@ -40,6 +73,10 @@ size_t split(const char limit, string buffer, char **split) {
     size_t i = 0;
     char *dup = strdup(buffer);
     char *str = strtok(dup, &limit);
+
+    if (str == NULL) {
+        split[i] = STR_NULL;
+    }
 
     while (str != NULL) {
         split[i++] = str;

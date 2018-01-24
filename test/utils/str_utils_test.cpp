@@ -17,6 +17,18 @@ TEST_CASE("length") {
 }
 
 
+TEST_CASE("no_spaces") {
+
+    SECTION("is true if string contains no whitespace") {
+        REQUIRE(no_spaces("thiscontainsnospaces!"));
+    }
+
+    SECTION("is false if string contains whitespace") {
+        REQUIRE_FALSE(no_spaces("space\nhere :"));
+    }
+}
+
+
 TEST_CASE("slice_until") {
 
     SECTION("returns string slice from buffer until limit is encountered") {
@@ -34,7 +46,10 @@ TEST_CASE("slice_until") {
 
         slice_until(COLON, arguments, slice);
 
+        printf("%s", arguments);
+
         REQUIRE(strcmp(slice, "argument1, argument2") == 0);
+        REQUIRE(strcmp(arguments, "") == 0);
     }
 
     SECTION("changes input buffer") {
@@ -44,6 +59,46 @@ TEST_CASE("slice_until") {
         slice_until(COMMA, arguments, slice);
 
         REQUIRE(strcmp(arguments, " argument2") == 0);
+    }
+
+    SECTION("handles empty string") {
+        char arg[] = "";
+        char slice[64];
+
+        slice_until(COMMA, arg, slice);
+
+        REQUIRE(strcmp(arg, "") == 0);
+        REQUIRE(strcmp(slice, "") == 0);
+    }
+
+}
+
+
+TEST_CASE("skip_until") {
+
+    SECTION("skips chars until limit is reached") {
+        char a_string[] = "a string, this is";
+
+        skip_until(COMMA, a_string);
+
+        REQUIRE(strcmp(a_string, " this is") == 0);
+    }
+
+    SECTION("returns the amount of skipped chars") {
+        char a_string[] = "a string, this is";
+
+        size_t n_skipped = skip_until(COMMA, a_string);
+
+        REQUIRE(n_skipped == 8);
+    }
+
+    SECTION("returns empty if limit not in string") {
+        char a_string[] = "no limit can be found here!";
+
+        size_t n_skipped = skip_until(COMMA, a_string);
+
+        REQUIRE(strcmp(a_string, "") == 0);
+        REQUIRE(n_skipped == 27);
     }
 
 }
@@ -92,6 +147,16 @@ TEST_CASE("split") {
         split(COMMA, a_string, actual);
 
         REQUIRE(strcmp(a_string, a_duplicate) == 0);
+    }
+
+    SECTION("handles empty string") {
+        char empty[] = "";
+        char *actual[3];
+
+        split(COMMA, empty, actual);
+
+        REQUIRE(strcmp(empty, "") == 0);
+        REQUIRE(actual[0] == NULL);
     }
 
 }

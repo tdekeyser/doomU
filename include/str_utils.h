@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 
 #define STR_NULL '\0'
@@ -15,6 +16,10 @@ typedef const char *string;
 
 
 size_t length(string);
+
+bool no_spaces(string);
+
+size_t skip_until(char limit, char *str);
 
 void slice_until(char limit, char *str, char *slice);
 
