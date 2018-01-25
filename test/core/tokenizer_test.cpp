@@ -7,12 +7,16 @@
 TEST_CASE("tokenize_function") {
 
     SECTION("splits a stripped string into a function") {
-        char a_func_text[] = "((a,b):boo!)";
+        char a_func_text[] = "(a,b):boo!)";
         char *arg[3];
         char returnVal[64];
         Func func = { .args=arg, .returnValue=returnVal };
 
         tokenize_function(a_func_text, &func);
+
+        printf("%s", func.returnValue);
+        printf("%s", func.args[0]);
+        printf("%s", func.args[1]);
 
         REQUIRE(strcmp(func.returnValue, "boo!") == 0);
         REQUIRE(strcmp(func.args[0], "a") == 0);

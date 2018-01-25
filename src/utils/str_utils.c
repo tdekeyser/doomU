@@ -25,24 +25,11 @@ bool no_spaces(string str) {
 }
 
 
-// TODO check if slice_until() can use this function
-size_t skip_until(char limit, char *str) {
+void skip_until(char limit, char *str) {
     assert(str != NULL);
 
-    char *tmp = str;
-
-    size_t i = 0;
-    while ((*str != limit) && (*str != STR_NULL)) {
-        str++;
-        i++;
-    }
-
-    while (*str++ != STR_NULL) {
-        *tmp++ = *str;
-    }
-    *tmp = STR_NULL;
-
-    return i;
+    char tmp[64];
+    slice_until(limit, str, tmp);
 }
 
 

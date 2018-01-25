@@ -84,21 +84,12 @@ TEST_CASE("skip_until") {
         REQUIRE(strcmp(a_string, " this is") == 0);
     }
 
-    SECTION("returns the amount of skipped chars") {
-        char a_string[] = "a string, this is";
-
-        size_t n_skipped = skip_until(COMMA, a_string);
-
-        REQUIRE(n_skipped == 8);
-    }
-
     SECTION("returns empty if limit not in string") {
         char a_string[] = "no limit can be found here!";
 
-        size_t n_skipped = skip_until(COMMA, a_string);
+        skip_until(COMMA, a_string);
 
         REQUIRE(strcmp(a_string, "") == 0);
-        REQUIRE(n_skipped == 27);
     }
 
 }

@@ -19,7 +19,7 @@ size_t length(string);
 
 bool no_spaces(string);
 
-size_t skip_until(char limit, char *str);
+void skip_until(char limit, char *str);
 
 void slice_until(char limit, char *str, char *slice);
 
