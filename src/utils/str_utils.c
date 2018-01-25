@@ -61,10 +61,7 @@ size_t split(const char limit, string buffer, char **split) {
     char *dup = strdup(buffer);
     char *str = strtok(dup, &limit);
 
-    if (str == NULL) {
-        split[i] = STR_NULL;
-    }
-
+    split[i] = NULL;
     while (str != NULL) {
         split[i++] = str;
         str = strtok(NULL, &limit);

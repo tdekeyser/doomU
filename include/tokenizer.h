@@ -2,12 +2,11 @@
 * A tokenizer cuts a sequence of inputs into a series of statments/words
 * that are labeled.
 */
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
+#ifndef DOOMU_TOKENIZER_H
+#define DOOMU_TOKENIZER_H
 
 #include "str_utils.h"
 #include <stdlib.h>
-
 
 
 typedef struct function_declaration {
@@ -16,9 +15,7 @@ typedef struct function_declaration {
 } Func;
 
 
-int lex(string filename, Func *func);
+int lex(string filename);
 
 
-
-
-#endif /* TOKENIZER_H */
+#endif /* DOOMU_TOKENIZER_H */
