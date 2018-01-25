@@ -15,7 +15,7 @@ typedef struct function_declaration {
 } Func;
 
 
-int lex(string filename);
+Func * lex(string filename);
 
 
 #endif /* DOOMU_TOKENIZER_H */

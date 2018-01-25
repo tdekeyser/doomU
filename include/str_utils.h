@@ -27,5 +27,7 @@ size_t split(char limit, string buffer, char **split);
 
 void strip(char *);
 
+void strip_leave_quotes(char *);
+
 
 #endif /* UTILS_H */

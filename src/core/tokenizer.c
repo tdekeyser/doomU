@@ -7,35 +7,52 @@
 
 Func *newFunc(char **args, string returnValue) {
     Func *func = (Func*) malloc(sizeof(Func));
+    if (!func)
+        fprintf(stderr, OOM);
+
     func->args = args;
     func->returnValue = returnValue;
+
     return func;
 }
 
 
 void freeFunc(Func *func) {
     assert(func != NULL);
-
     if (func->args != NULL) {
         free(func->args);
     }
-
     free(func);
 }
 
 
 char **tokenize_arguments(char *buffer) {
     assert(buffer != NULL);
-    assert(no_spaces(buffer));
 
-    char **args = (char**) malloc(ARG_LEN);
     char arg_str[VAR_LEN * ARG_LEN];
+    char **args = (char**) malloc(ARG_LEN);
+    if (!args)
+        fprintf(stderr, OOM);
+
     slice_until(PAREN_CLOSED, buffer, arg_str);
     assert((length(buffer) > 0)); // Syntax error: no closing parentheses found
-
+    
     split(COMMA, arg_str, args);
-
     return args;
+}
+
+
+char *tokenize_returnValue(char *buffer) {
+    assert(buffer != NULL);
+
+    char *returnValue = (char*) malloc(VAR_LEN);
+    if (!returnValue)
+        fprintf(stderr, OOM);
+
+    slice_until(PAREN_CLOSED, buffer, returnValue);
+
+    assert(length(returnValue) > 0);
+    return returnValue;
 }
 
 
@@ -48,14 +65,14 @@ Func *tokenize_function(char *buffer) {
     char **args = tokenize_arguments(buffer);
 
     skip_until(COLON, buffer);
-    char *returnVal = (char*) malloc(VAR_LEN);
-    slice_until(PAREN_CLOSED, buffer, returnVal);
+    char *returnVal = tokenize_returnValue(buffer);
 
     return newFunc(args, returnVal);
 }
 
 
-int lex(string filename) {
+// TODO fails if file is larger than BUFFER
+Func * lex(string filename) {
     char buffer[BUFFER + 1];
     FILE *file = fopen(filename, "r");
 
@@ -64,15 +81,13 @@ int lex(string filename) {
         while ((n_read = fread(buffer, sizeof(char), BUFFER, file)) > 0) {
             strip(buffer);
             skip_until(PAREN_OPEN, buffer);
-
-            Func *func = tokenize_function(buffer);
+            return tokenize_function(buffer);
         }
+
         fclose(file);  
-    } 
-    
-    if (ferror(file)) {
-        fprintf(stderr, "An error occurred with filename %s", filename);
+    } else {
+        fprintf(stderr, "An error occurred while reading file with filename '%s'", filename);
     }
 
-    return 0;
+    return NULL;
 }
