@@ -7,7 +7,8 @@
 
 #include "function.h"
 
-Lambda *lex(const char *filename);
+
+Stream *lex(const char *filename);
 
 
 #endif /* DOOMU_TOKENIZER_H */

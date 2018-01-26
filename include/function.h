@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 
+
 typedef struct anonymous_function_declaration {
     char **args;
     const char *returnValue;
