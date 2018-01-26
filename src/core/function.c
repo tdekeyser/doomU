@@ -17,9 +17,10 @@ Lambda *newLambda(char **args, const char *returnValue) {
 }
 
 
-void freeFunc(Lambda *lambda) {
+void freeLambda(Lambda *lambda) {
     assert(lambda != NULL);
 
+    // TODO cannot be freed correctly because you don't know how many there are...
     if (lambda->args != NULL)
         free(lambda->args);
     free(lambda);

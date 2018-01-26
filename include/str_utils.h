@@ -18,6 +18,8 @@ typedef const char *string;
 
 size_t length(string);
 
+bool contains(string, char);
+
 bool no_spaces(string);
 
 void skip_until(char limit, char *str);

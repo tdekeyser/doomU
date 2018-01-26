@@ -3,7 +3,7 @@ project(doomU)
 
 set(CMAKE_CXX_STANDARD 11)
 
-file(GLOB project_sources src/*/*.c include/*.h)
+file(GLOB project_sources src/*.c src/*/*.c include/*.h)
 set(SOURCE_FILES ${project_sources})
 
 file(GLOB project_tests test/*/*.*pp test/Catch/catch.hpp)
@@ -20,7 +20,7 @@ option(SOURCE "Only builds executable with source files." OFF)
 option(TEST "Compile all tests and build executable that runs all tests." OFF)
 
 if (SOURCE)
-    add_executable(doomU ${SOURCE_FILES})
+    add_executable(doomU ${SOURCE_FILES} src/main.c)
     target_link_libraries(doomU ${CURL_LIBRARY})
 endif()
 if (TEST) # Create executable for testing purposes

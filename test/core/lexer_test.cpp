@@ -69,8 +69,8 @@ TEST_CASE("lex") {
         REQUIRE(strcmp(actual->name, "main") == 0);
         REQUIRE(actual->lambdas[0]->args[0] == NULL);
         REQUIRE(strcmp(actual->lambdas[0]->returnValue, "\"Hello world!\"") == 0);
-        REQUIRE(actual->lambdas[1]->args[0] == NULL);
-        REQUIRE(strcmp(actual->lambdas[1]->returnValue, "print") == 0);
+        REQUIRE(strcmp(actual->lambdas[1]->args[0], "a") == 0);     
+        REQUIRE(strcmp(actual->lambdas[1]->returnValue, "print:a") == 0);
         REQUIRE(actual->n_lambdas == 2);
     }
 

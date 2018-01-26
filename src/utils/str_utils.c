@@ -13,6 +13,15 @@ size_t length(string str) {
 }
 
 
+bool contains(string str, char c) {
+    while (*str++ != STR_NULL) {
+        if (*str == c)
+            return true;
+    }
+    return false;
+}
+
+
 bool no_spaces(string str) {
     assert(str != NULL);
 

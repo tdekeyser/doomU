@@ -62,7 +62,7 @@ Stream *tokenize_stream(char *buffer) {
         lambdas[i++] = tokenize_lambda(buffer);
     }
 
-    return newStream("main", lambdas, i);
+    return newStream((char *) "main", lambdas, i);
 }
 
 

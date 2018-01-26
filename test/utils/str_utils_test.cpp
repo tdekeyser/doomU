@@ -17,10 +17,25 @@ TEST_CASE("length") {
 }
 
 
+TEST_CASE("contains") {
+
+    SECTION("returns true if char is in string") {
+        REQUIRE(contains((string) "this is a string with a, comma", COMMA) == true);
+        REQUIRE(contains((string) "here is the a", 'a') == true);        
+    }
+
+    SECTION("false if char not in string") {
+        REQUIRE_FALSE(contains((string) "no comma here", COMMA));
+        REQUIRE_FALSE(contains((string) "neither a colon there", COLON));        
+    }
+
+}
+
+
 TEST_CASE("no_spaces") {
 
     SECTION("is true if string contains no whitespace") {
-        REQUIRE(no_spaces("thiscontainsnospaces!"));
+        REQUIRE(no_spaces("thiscontainsnospaces!") == true);
     }
 
     SECTION("is false if string contains whitespace") {
