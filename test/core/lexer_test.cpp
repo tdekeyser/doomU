@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 #include "../Catch/catch.hpp"
-#include "../../src/core/tokenizer.c"
+#include "../../src/core/lexer.c"
 
 
 TEST_CASE("tokenize_function") {
@@ -65,8 +65,9 @@ TEST_CASE("lex") {
 
         Func *actual = lex(filename);
 
+        printf("%s", actual->returnValue);
         REQUIRE(actual->args[0] == NULL);
-        REQUIRE(strcmp(actual->returnValue, "\"Helloworld!\"") == 0);
+        REQUIRE(strcmp(actual->returnValue, "\"Hello world!\"") == 0);
     }
 
 }

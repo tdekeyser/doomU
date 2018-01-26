@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "../../include/str_utils.h"
-#include "../../include/tokenizer.h"
+#include "../../include/lexer.h"
 #include "config.c"
 
 
@@ -79,7 +79,7 @@ Func * lex(string filename) {
     if (file) {
         size_t n_read;
         while ((n_read = fread(buffer, sizeof(char), BUFFER, file)) > 0) {
-            strip(buffer);
+            strip_leave_quotes(buffer);
             skip_until(PAREN_OPEN, buffer);
             return tokenize_function(buffer);
         }

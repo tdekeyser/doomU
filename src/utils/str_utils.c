@@ -93,13 +93,17 @@ void strip_leave_quotes(char *str) {
     bool in_quote = false;
     char *tmp = str;
     while (*str != STR_NULL) {
-        if (*str == QUOTE)
+        if (*str == QUOTE) {
+            printf("hoi");
             in_quote = in_quote ? false : true;
+        }
 
         while (!in_quote && isspace(*str))
             str++;
-            
-        printf("%i", in_quote);
+
+        if (*str == QUOTE)
+            in_quote = in_quote ? false : true;
+
         *tmp++ = *str++;
     }
     *tmp = STR_NULL;
