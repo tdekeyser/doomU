@@ -184,14 +184,17 @@ TEST_CASE("strip_leave_quotes") {
         char another[] = "\"don't touch this\"! But remove space ";
 
         strip_leave_quotes(a_string);
-        printf("'%s'", a_string);
+        strip_leave_quotes(another);
+
         REQUIRE(strcmp(a_string, "full\"but don't touch this\"!") == 0);
         REQUIRE(strcmp(another, "\"don't touch this\"!Butremovespace") == 0);
     }
 
     SECTION("empty string remains empty") {
         char empty[] = "";
+
         strip_leave_quotes(empty);
+        
         REQUIRE(strcmp(empty, "") == 0);
     }
 

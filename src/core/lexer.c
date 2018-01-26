@@ -1,29 +1,11 @@
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+
 #include "../../include/str_utils.h"
 #include "../../include/lexer.h"
 #include "config.c"
 
-
-Func *newFunc(char **args, string returnValue) {
-    Func *func = (Func*) malloc(sizeof(Func));
-    if (!func)
-        fprintf(stderr, OOM);
-
-    func->args = args;
-    func->returnValue = returnValue;
-
-    return func;
-}
-
-
-void freeFunc(Func *func) {
-    assert(func != NULL);
-    if (func->args != NULL) {
-        free(func->args);
-    }
-    free(func);
-}
 
 
 char **tokenize_arguments(char *buffer) {
@@ -57,9 +39,8 @@ char *tokenize_returnValue(char *buffer) {
 
 
 // TODO fix memory leaks
-Func *tokenize_function(char *buffer) {
+Lambda *tokenize_function(char *buffer) {
     assert(buffer != NULL);
-    assert(no_spaces(buffer));
 
     skip_until(PAREN_OPEN, buffer);
     char **args = tokenize_arguments(buffer);
@@ -67,12 +48,12 @@ Func *tokenize_function(char *buffer) {
     skip_until(COLON, buffer);
     char *returnVal = tokenize_returnValue(buffer);
 
-    return newFunc(args, returnVal);
+    return newLambda(args, returnVal);
 }
 
 
 // TODO fails if file is larger than BUFFER
-Func * lex(string filename) {
+Lambda *lex(string filename) {
     char buffer[BUFFER + 1];
     FILE *file = fopen(filename, "r");
 
@@ -80,6 +61,9 @@ Func * lex(string filename) {
         size_t n_read;
         while ((n_read = fread(buffer, sizeof(char), BUFFER, file)) > 0) {
             strip_leave_quotes(buffer);
+
+            //Stream *stream = (Stream *) malloc(sizeof(Stream));
+
             skip_until(PAREN_OPEN, buffer);
             return tokenize_function(buffer);
         }

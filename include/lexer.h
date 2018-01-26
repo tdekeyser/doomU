@@ -5,17 +5,9 @@
 #ifndef DOOMU_TOKENIZER_H
 #define DOOMU_TOKENIZER_H
 
-#include "str_utils.h"
-#include <stdlib.h>
+#include "function.h"
 
-
-typedef struct function_declaration {
-    char **args;
-    string returnValue;
-} Func;
-
-
-Func * lex(string filename);
+Lambda *lex(const char *filename);
 
 
 #endif /* DOOMU_TOKENIZER_H */

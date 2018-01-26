@@ -1,7 +1,8 @@
 #define CATCH_CONFIG_MAIN
 
-#include <unistd.h>
+
 #include "../Catch/catch.hpp"
+#include "../../src/core/function.c"
 #include "../../src/core/lexer.c"
 
 
@@ -10,11 +11,11 @@ TEST_CASE("tokenize_function") {
     SECTION("splits a stripped string into a function") {
         char a_func_text[] = "(a,b):boo!)";
 
-        Func *func = tokenize_function(a_func_text);
+        Lambda *lambda = tokenize_function(a_func_text);
 
-        REQUIRE(strcmp(func->returnValue, "boo!") == 0);
-        REQUIRE(strcmp(func->args[0], "a") == 0);
-        REQUIRE(strcmp(func->args[1], "b") == 0);
+        REQUIRE(strcmp(lambda->returnValue, "boo!") == 0);
+        REQUIRE(strcmp(lambda->args[0], "a") == 0);
+        REQUIRE(strcmp(lambda->args[1], "b") == 0);
     }
 
 }
@@ -63,7 +64,7 @@ TEST_CASE("lex") {
     SECTION("tokenizes a file as a function") {
         string filename = "../test/core/helloworld.du";
 
-        Func *actual = lex(filename);
+        Lambda *actual = lex(filename);
 
         printf("%s", actual->returnValue);
         REQUIRE(actual->args[0] == NULL);
