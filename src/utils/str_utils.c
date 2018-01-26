@@ -86,3 +86,22 @@ void strip(char *str) {
 // isspace(int) needs cast to expected range for char!
 // https://stackoverflow.com/questions/28654792/what-do-i-need-to-do-so-the-function-isspace-work-in-c
 
+
+void strip_leave_quotes(char *str) {
+    assert(str != NULL);
+
+    bool in_quote = false;
+    char *tmp = str;
+    while (*str != STR_NULL) {
+        if (*str == QUOTE)
+            in_quote = in_quote ? false : true;
+
+        while (!in_quote && isspace(*str))
+            str++;
+            
+        printf("%i", in_quote);
+        *tmp++ = *str++;
+    }
+    *tmp = STR_NULL;
+}
+

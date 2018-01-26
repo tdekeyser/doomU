@@ -180,11 +180,17 @@ TEST_CASE("strip") {
 TEST_CASE("strip_leave_quotes") {
 
     SECTION("removes whitespace but not inside quotation marks") {
-        char a_string[] = "    full\nof\r whitespace \"but don't touch this\"! ";
+        char a_string[] = " full\n \"but don't touch this\"! ";
 
         strip_leave_quotes(a_string);
+        printf("%s", a_string);
+        REQUIRE(strcmp(a_string, "full\"but don't touch this\"!") == 0);
+    }
 
-        REQUIRE(strcmp(a_string, "fullofwhitespace\"but don't touch this\"!"));
+    SECTION("empty string remains empty") {
+        char empty[] = "";
+        strip_leave_quotes(empty);
+        REQUIRE(strcmp(empty, "") == 0);
     }
 
 }

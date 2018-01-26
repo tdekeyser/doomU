@@ -10,6 +10,7 @@
 #define PAREN_CLOSED ')'
 #define COMMA ','
 #define COLON ':'
+#define QUOTE '\"'
 
 
 typedef const char *string;
