@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef DOOMU_STR_UTILS_H
+#define DOOMU_STR_UTILS_H
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -13,7 +13,7 @@
 #define QUOTE '\"'
 
 
-typedef const char *string;
+typedef char const *string;
 
 
 size_t length(string);
@@ -33,4 +33,4 @@ void strip(char *);
 void strip_leave_quotes(char *);
 
 
-#endif /* UTILS_H */
+#endif /* DOOMU_STR_UTILS_H */

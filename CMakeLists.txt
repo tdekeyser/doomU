@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 project(doomU)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
 
-file(GLOB project_sources src/*.c src/*/*.c include/*.h)
+file(GLOB project_sources src/*/*.c include/*.h)
 set(SOURCE_FILES ${project_sources})
 
 file(GLOB project_tests test/*/*.*pp test/Catch/catch.hpp)

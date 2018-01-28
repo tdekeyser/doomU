@@ -13,8 +13,10 @@ char **tokenize_arguments(char *buffer) {
 
     char arg_str[VAR_LEN * ARG_LEN];
     char **args = (char**) malloc(ARG_LEN);
-    if (!args)
+    if (!args) {
         fprintf(stderr, OOM);
+        return NULL;
+    }
 
     slice_until(PAREN_CLOSED, buffer, arg_str);
     assert((length(buffer) > 0)); // Syntax error: no closing parentheses found
@@ -28,8 +30,10 @@ char *tokenize_returnValue(char *buffer) {
     assert(buffer != NULL);
 
     char *returnValue = (char*) malloc(VAR_LEN);
-    if (!returnValue)
+    if (!returnValue) {
         fprintf(stderr, OOM);
+        return NULL;
+    }
 
     slice_until(PAREN_CLOSED, buffer, returnValue);
 

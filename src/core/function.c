@@ -5,10 +5,12 @@
 #include "config.c"
 
 
-Lambda *newLambda(char **args, const char *returnValue) {
+Lambda *newLambda(char **args, char const *returnValue) {
     Lambda *lambda = (Lambda*) malloc(sizeof(Lambda));
-    if (!lambda)
+    if (!lambda) {
         fprintf(stderr, OOM);
+        return NULL;
+    }
 
     lambda->args = args;
     lambda->returnValue = returnValue;
@@ -20,18 +22,22 @@ Lambda *newLambda(char **args, const char *returnValue) {
 void freeLambda(Lambda *lambda) {
     assert(lambda != NULL);
 
-    // TODO cannot be freed correctly because you don't know how many there are...
     if (lambda->args != NULL)
         free(lambda->args);
+    if (lambda->returnValue != NULL)
+        free((void *) lambda->returnValue);
+
     free(lambda);
 }
 
 
-Stream *newStream(char *name, Lambda **lambdas, size_t n_lambdas) {
+Stream *newStream(char const *name, Lambda **lambdas, size_t n_lambdas) {
     Stream *stream = (Stream *) malloc(sizeof(Stream));
-    if (!stream)
+    if (!stream) {
         fprintf(stderr, OOM);
-    
+        return NULL;
+    }
+
     stream->name = name;
     stream->n_lambdas = n_lambdas;
     stream->lambdas = lambdas;
@@ -43,8 +49,8 @@ Stream *newStream(char *name, Lambda **lambdas, size_t n_lambdas) {
 void freeStream(Stream *stream) {
     assert(stream != NULL);
 
-    for (int i = 0; i < stream->n_lambdas; i++) {
-        free(stream->lambdas[i]);
+    for (unsigned int i = 0; i < stream->n_lambdas; i++) {
+        freeLambda(stream->lambdas[i]);
     }   
     free(stream);
 }
