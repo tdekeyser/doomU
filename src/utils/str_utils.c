@@ -91,8 +91,7 @@ void strip(char *str) {
     }
     *tmp = STR_NULL;
 }
-// isspace(int) needs cast to expected range for char!
-// https://stackoverflow.com/questions/28654792/what-do-i-need-to-do-so-the-function-isspace-work-in-c
+
 
 void strip_leave_quotes(char *str) {
     assert(str != NULL);
