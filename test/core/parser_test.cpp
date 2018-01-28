@@ -1,5 +1,4 @@
-#define CATCH_CONFIG_MAIN
-
+#include <cstring>
 
 #include "../Catch/catch.hpp"
 #include "../../include/function.h"
@@ -73,6 +72,15 @@ TEST_CASE("tokenize_returnValue") {
 
         REQUIRE(returnValue->type == List);
         REQUIRE(strcmp(returnValue->value, "[1,2,3,4]") == 0);
+    }
+
+    SECTION("parses function return value from lambda") {
+        char snip[] = "print:a:b)";
+
+        TypedValue *returnValue = tokenize_returnValue(snip);
+
+        REQUIRE(returnValue->type == Func);
+        REQUIRE(strcmp(returnValue->value, "print:a:b") == 0);
     }
 
 }

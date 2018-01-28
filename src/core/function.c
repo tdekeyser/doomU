@@ -12,10 +12,13 @@ Type get_type(string str) {
 
     if (isdigit(str[0]))
         return Int;
-    if (str[0] == QUOTE)
-        return Str;
     if (str[0] == SQUARE_BRACKET_OPEN)
         return List;
+    if (str[0] == QUOTE) {
+        return Str;
+    } else if (contains(str, COLON)) {
+        return Func;
+    }
 
     return Void;
 }

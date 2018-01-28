@@ -25,7 +25,7 @@ if (SOURCE)
     target_link_libraries(doomU ${CURL_LIBRARY})
 endif()
 if (TEST) # Create executable for testing purposes
-    add_executable(doomU_test ${SOURCE_FILES} ${TEST_FILES})
+    add_executable(doomU_test ${SOURCE_FILES} ${TEST_FILES} test/main_test.cpp)
     target_link_libraries(doomU_test ${CURL_LIBRARY})
 endif()
 
