@@ -9,11 +9,12 @@ TEST_CASE("interpret_lambda") {
     SECTION("can return a string value in a non-arg lambda") {
         auto **args = (char**) malloc(ARG_LEN);
         char hello[] = "\"Hello world!\"";
-        Lambda *lambda = newLambda(args, hello);
+        Lambda *lambda = newLambda(args, newTypedValue(Str, hello));
 
-        const char *actual = interpret_lambda(lambda, (char *) "");
+        TypedValue *actual = interpret_lambda(lambda, newTypedValue(Void, ""));
 
-        REQUIRE(strcmp(actual, hello) == 0);
+        REQUIRE(actual->type == Str);
+        REQUIRE(strcmp(actual->value, hello) == 0);
     }
 
     SECTION("can print a value from a lambda") {
@@ -21,11 +22,12 @@ TEST_CASE("interpret_lambda") {
         args[0] = (char *) "a";
         char print[] = "print:a";
         char hello[] = "\"Hello world!\"";
-        Lambda *lambda = newLambda(args, print);
+        Lambda *lambda = newLambda(args, newTypedValue(Str, print));
 
-        const char *actual = interpret_lambda(lambda, hello);
+        TypedValue *actual = interpret_lambda(lambda, newTypedValue(Str, hello));
 
-        REQUIRE(strcmp(actual, "") == 0);
+        REQUIRE(actual->type == Void);
+        REQUIRE(strcmp(actual->value, "") == 0);
     }
 
 }

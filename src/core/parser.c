@@ -26,19 +26,14 @@ char **tokenize_arguments(char *buffer) {
 }
 
 
-char *tokenize_returnValue(char *buffer) {
+TypedValue *tokenize_returnValue(char *buffer) {
     assert(buffer != NULL);
 
-    char *returnValue = (char*) malloc(VAR_LEN);
-    if (!returnValue) {
-        fprintf(stderr, OOM);
-        return NULL;
-    }
+    char *value = (char*) malloc(VAR_LEN);
+    slice_until(PAREN_CLOSED, buffer, value);
+    assert(length(value) > 0);
 
-    slice_until(PAREN_CLOSED, buffer, returnValue);
-
-    assert(length(returnValue) > 0);
-    return returnValue;
+    return newTypedValue(get_type(value), value);
 }
 
 
@@ -49,7 +44,7 @@ Lambda *tokenize_lambda(char *buffer) {
     char **args = tokenize_arguments(buffer);
 
     skip_until(COLON, buffer);
-    char *returnVal = tokenize_returnValue(buffer);
+    TypedValue *returnVal = tokenize_returnValue(buffer);
 
     return newLambda(args, returnVal);
 }

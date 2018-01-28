@@ -2,18 +2,19 @@
 
 
 #include "../Catch/catch.hpp"
-#include "../../src/core/function.c"
+#include "../../include/function.h"
 #include "../../src/core/parser.c"
 
 
 TEST_CASE("tokenize_lambda") {
 
     SECTION("splits a stripped string into a lambda") {
-        char a_func_text[] = "(a,b):boo!)";
+        char a_func_text[] = "(a,b):\"boo!\")";
 
         Lambda *lambda = tokenize_lambda(a_func_text);
 
-        REQUIRE(strcmp(lambda->returnValue, "boo!") == 0);
+        REQUIRE(lambda->returnValue->type == Str);
+        REQUIRE(strcmp(lambda->returnValue->value, "\"boo!\"") == 0);
         REQUIRE(strcmp(lambda->args[0], "a") == 0);
         REQUIRE(strcmp(lambda->args[1], "b") == 0);
     }
@@ -47,12 +48,31 @@ TEST_CASE("tokenize_arguments") {
 
 TEST_CASE("tokenize_returnValue") {
 
-    SECTION("parses return value from lambda") {
-        char snip[] = "return this)";
+    SECTION("parses string return value from lambda") {
+        char snip[] = "\"return this\")";
 
-        char *returnValue = tokenize_returnValue(snip);
+        TypedValue *returnValue = tokenize_returnValue(snip);
 
-        REQUIRE(strcmp(returnValue, "return this") == 0);
+        REQUIRE(returnValue->type == Str);
+        REQUIRE(strcmp(returnValue->value, "\"return this\"") == 0);
+    }
+
+    SECTION("parses int return value from lambda") {
+        char snip[] = "45)";
+
+        TypedValue *returnValue = tokenize_returnValue(snip);
+
+        REQUIRE(returnValue->type == Int);
+        REQUIRE(strcmp(returnValue->value, "45") == 0);
+    }
+
+    SECTION("parses list return value from lambda") {
+        char snip[] = "[1,2,3,4])";
+
+        TypedValue *returnValue = tokenize_returnValue(snip);
+
+        REQUIRE(returnValue->type == List);
+        REQUIRE(strcmp(returnValue->value, "[1,2,3,4]") == 0);
     }
 
 }
@@ -67,9 +87,9 @@ TEST_CASE("parse") {
 
         REQUIRE(strcmp(actual->name, "main") == 0);
         REQUIRE(actual->lambdas[0]->args[0] == NULL);
-        REQUIRE(strcmp(actual->lambdas[0]->returnValue, "\"Hello world!\"") == 0);
+        REQUIRE(strcmp(actual->lambdas[0]->returnValue->value, "\"Hello world!\"") == 0);
         REQUIRE(strcmp(actual->lambdas[1]->args[0], "a") == 0);     
-        REQUIRE(strcmp(actual->lambdas[1]->returnValue, "print:a") == 0);
+        REQUIRE(strcmp(actual->lambdas[1]->returnValue->value, "print:a") == 0);
         REQUIRE(actual->n_lambdas == 2);
     }
 

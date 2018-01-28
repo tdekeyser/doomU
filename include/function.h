@@ -4,9 +4,19 @@
 #include <stdio.h>
 
 
+typedef enum type {
+    Void, Int, Str, List, Func
+} Type;
+
+
+typedef struct typed_value {
+    Type type;
+    char const *value;
+} TypedValue;
+
 typedef struct anonymous_function_declaration {
     char **args;
-    char const *returnValue;
+    TypedValue *returnValue;
 } Lambda;
 
 typedef struct stream_declaration {
@@ -16,7 +26,11 @@ typedef struct stream_declaration {
 } Stream;
 
 
-Lambda *newLambda(char **args, char const *returnValue);
+Type get_type(char const *str);
+TypedValue *newTypedValue(Type type, char const *value);
+void freeTypedValue(TypedValue *);
+
+Lambda *newLambda(char **args, TypedValue *returnValue);
 void freeLambda(Lambda *);
 
 Stream *newStream(char const *name, Lambda **, size_t n_lambdas);

@@ -11,6 +11,8 @@
 #define COMMA ','
 #define COLON ':'
 #define QUOTE '\"'
+#define SQUARE_BRACKET_OPEN '['
+#define SQUARE_BRACKET_CLOSED ']'
 
 
 typedef char const *string;
