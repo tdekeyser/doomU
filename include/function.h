@@ -8,14 +8,18 @@ typedef enum type {
     Void, Int, Str, List, Func
 } Type;
 
-
 typedef struct typed_value {
     Type type;
     char const *value;
 } TypedValue;
 
+typedef struct arguments {
+    size_t n_args;
+    char **values;
+} Arguments;
+
 typedef struct anonymous_function_declaration {
-    char **args;
+    Arguments *args;
     TypedValue *returnValue;
 } Lambda;
 
@@ -30,7 +34,10 @@ Type get_type(char const *str);
 TypedValue *newTypedValue(Type type, char const *value);
 void freeTypedValue(TypedValue *);
 
-Lambda *newLambda(char **args, TypedValue *returnValue);
+Arguments *newArguments(size_t, char**);
+void freeArguments(Arguments *);
+
+Lambda *newLambda(Arguments *args, TypedValue *returnValue);
 void freeLambda(Lambda *);
 
 Stream *newStream(char const *name, Lambda **, size_t n_lambdas);

@@ -9,7 +9,7 @@ TEST_CASE("interpret_lambda") {
     SECTION("can return a string value in a non-arg lambda") {
         auto **args = (char**) malloc(ARG_LEN);
         char hello[] = "\"Hello world!\"";
-        Lambda *lambda = newLambda(args, newTypedValue(Str, hello));
+        Lambda *lambda = newLambda(newArguments(0, args), newTypedValue(Str, hello));
 
         TypedValue *actual = interpret_lambda(lambda, newTypedValue(Void, ""));
 
@@ -22,7 +22,7 @@ TEST_CASE("interpret_lambda") {
         args[0] = (char *) "a";
         char print[] = "print:a";
         char hello[] = "\"Hello world!\"";
-        Lambda *lambda = newLambda(args, newTypedValue(Str, print));
+        Lambda *lambda = newLambda(newArguments(1, args), newTypedValue(Func, print));
 
         TypedValue *actual = interpret_lambda(lambda, newTypedValue(Str, hello));
 

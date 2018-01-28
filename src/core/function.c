@@ -40,14 +40,24 @@ TypedValue *newTypedValue(Type type, char const *value) {
 }
 
 
-void freeTypedValue(TypedValue *typedValue) {
-    assert(typedValue != NULL);
+Arguments *newArguments(size_t n_args, char **values) {
+    assert(n_args <= ARG_LEN);
+    assert(values != NULL);
 
-    free(typedValue);
+    Arguments *arguments = (Arguments *) malloc(sizeof(Arguments));
+    if (!arguments) {
+        fprintf(stderr, OOM);
+        return NULL;
+    }
+
+    arguments->n_args = n_args;
+    arguments->values = values;
+
+    return arguments;
 }
 
 
-Lambda *newLambda(char **args, TypedValue *returnValue) {
+Lambda *newLambda(Arguments *args, TypedValue *returnValue) {
     Lambda *lambda = (Lambda *) malloc(sizeof(Lambda));
     if (!lambda) {
         fprintf(stderr, OOM);
@@ -58,18 +68,6 @@ Lambda *newLambda(char **args, TypedValue *returnValue) {
     lambda->returnValue = returnValue;
 
     return lambda;
-}
-
-
-void freeLambda(Lambda *lambda) {
-    assert(lambda != NULL);
-
-    if (lambda->args != NULL)
-        free(lambda->args);
-    if (lambda->returnValue != NULL)
-        freeTypedValue(lambda->returnValue);
-
-    free(lambda);
 }
 
 
@@ -85,6 +83,34 @@ Stream *newStream(char const *name, Lambda **lambdas, size_t n_lambdas) {
     stream->lambdas = lambdas;
 
     return stream;
+}
+
+
+void freeTypedValue(TypedValue *typedValue) {
+    assert(typedValue != NULL);
+
+    free(typedValue);
+}
+
+
+void freeArguments(Arguments *arguments) {
+    assert(arguments != NULL);
+
+    if (arguments->values != NULL)
+        free(arguments->values);
+
+    free(arguments);
+}
+
+void freeLambda(Lambda *lambda) {
+    assert(lambda != NULL);
+
+    if (lambda->args != NULL)
+        freeArguments(lambda->args);
+    if (lambda->returnValue != NULL)
+        freeTypedValue(lambda->returnValue);
+
+    free(lambda);
 }
 
 

@@ -7,22 +7,21 @@
 #include "config.c"
 
 
-
-char **tokenize_arguments(char *buffer) {
+Arguments *tokenize_arguments(char *buffer) {
     assert(buffer != NULL);
 
     char arg_str[VAR_LEN * ARG_LEN];
     char **args = (char**) malloc(ARG_LEN);
     if (!args) {
         fprintf(stderr, OOM);
-        return NULL;
     }
 
     slice_until(PAREN_CLOSED, buffer, arg_str);
     assert((length(buffer) > 0)); // Syntax error: no closing parentheses found
     
-    split(COMMA, arg_str, args);
-    return args;
+    size_t n_args = split(COMMA, arg_str, args);
+
+    return newArguments(n_args, args);
 }
 
 
@@ -41,7 +40,7 @@ Lambda *tokenize_lambda(char *buffer) {
     assert(buffer != NULL);
 
     skip_until(PAREN_OPEN, buffer);
-    char **args = tokenize_arguments(buffer);
+    Arguments *args = tokenize_arguments(buffer);
 
     skip_until(COLON, buffer);
     TypedValue *returnVal = tokenize_returnValue(buffer);
@@ -66,6 +65,8 @@ Stream *tokenize_stream(char *buffer) {
 
 // TODO fails if file is larger than BUFFER
 Stream *parse(string filename) {
+    assert(filename != NULL);
+
     char buffer[BUFFER + 1];
     FILE *file = fopen(filename, "r");
 

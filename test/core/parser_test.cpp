@@ -14,8 +14,8 @@ TEST_CASE("tokenize_lambda") {
 
         REQUIRE(lambda->returnValue->type == Str);
         REQUIRE(strcmp(lambda->returnValue->value, "\"boo!\"") == 0);
-        REQUIRE(strcmp(lambda->args[0], "a") == 0);
-        REQUIRE(strcmp(lambda->args[1], "b") == 0);
+        REQUIRE(strcmp(lambda->args->values[0], "a") == 0);
+        REQUIRE(strcmp(lambda->args->values[1], "b") == 0);
     }
 
 }
@@ -27,19 +27,21 @@ TEST_CASE("tokenize_arguments") {
         char snip[] = "arg1,arg2):return";
         string expected[] = { "arg1", "arg2" };
 
-        char **args = tokenize_arguments(snip);
+        Arguments *args = tokenize_arguments(snip);
 
-        for (int i = 0; i < 2; i++) {
-            REQUIRE(strcmp(args[i], expected[i]) == 0);
+        for (unsigned int i = 0; i < args->n_args; i++) {
+            REQUIRE(strcmp(args->values[i], expected[i]) == 0);
         }
+        REQUIRE(args->n_args == 2);
     }
 
     SECTION("no arguments returns null") {
         char snip[] = "):return";
 
-        char **args = tokenize_arguments(snip);
+        Arguments *args = tokenize_arguments(snip);
 
-        REQUIRE(args[0] == NULL);
+        REQUIRE(args->values[0] == NULL);
+        REQUIRE(args->n_args == 0);
     }
 
 }
@@ -94,9 +96,9 @@ TEST_CASE("parse") {
         Stream *actual = parse(filename);
 
         REQUIRE(strcmp(actual->name, "main") == 0);
-        REQUIRE(actual->lambdas[0]->args[0] == NULL);
+        REQUIRE(actual->lambdas[0]->args->values[0] == NULL);
         REQUIRE(strcmp(actual->lambdas[0]->returnValue->value, "\"Hello world!\"") == 0);
-        REQUIRE(strcmp(actual->lambdas[1]->args[0], "a") == 0);     
+        REQUIRE(strcmp(actual->lambdas[1]->args->values[0], "a") == 0);
         REQUIRE(strcmp(actual->lambdas[1]->returnValue->value, "print:a") == 0);
         REQUIRE(actual->n_lambdas == 2);
     }
