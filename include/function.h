@@ -5,12 +5,12 @@
 
 
 typedef enum type {
-    Void, Str, List, Func
+    Void, Str, Num, Func
 } Type;
 
 typedef struct typed_value {
     Type type;
-    char const *value;
+    void *value;
 } TypedValue;
 
 typedef struct arguments {
@@ -31,7 +31,7 @@ typedef struct stream_declaration {
 
 
 Type get_type(char const *str);
-TypedValue *newTypedValue(Type type, char const *value);
+TypedValue *newTypedValue(Type type, void *value);
 void freeTypedValue(TypedValue *);
 
 Arguments *newArguments(size_t, char**);

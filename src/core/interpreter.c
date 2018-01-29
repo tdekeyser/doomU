@@ -19,13 +19,13 @@ typedef struct function_parameters {
 int add(Parameters *p) {
     assert(p->n_values == 2);
 
-    return (*(int *) p->values[0]) + (*(int *) p->values[1]);
+    return ((*(char *) p->values[0]) - '0') + ((*(char *) p->values[1]) - '0');
 }
 
 int print(Parameters *p) {
     assert(p->n_values == 1);
 
-    if (p->type == List) {
+    if (p->type == Num) {
         printf("%i", *(int *) p->values[0]);
     } else if (p->type == Str) {
         printf("hello");
@@ -67,7 +67,7 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *input) {
     if (returnVal->type == Func) {
 
         // TODO move to parser ----------
-        char *buffer = strdup(returnVal->value);
+        char *buffer = strdup((const char*) returnVal->value);
         char func_name[VAR_LEN];
 
         // get func name
@@ -85,31 +85,28 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *input) {
         if (lambda->args->n_args == 1) {
 
             char inputVal;
-            int *result = (int *) strdup(input->value);
+            long *result = (long *) malloc(3);
             int i = 0;
-            while ((inputVal = input->value[i++]) != STR_NULL) {
-                if ((inputVal == COMMA) || (inputVal == SQUARE_BRACKET_OPEN) || (inputVal == SQUARE_BRACKET_CLOSED))
-                    continue;
-
-                printf("%c", inputVal);
+            int count = 0;
+            while ((inputVal = ((char *) input->value)[i++]) != NULL) {
 
                 void **paramVals = (void **) malloc(n_split);
-                for (unsigned int i=0; i<n_split; i++) {
-                    if (strcmp(params[i], lambda->args->values[0]) == 0) {
-                        paramVals[i] = &inputVal;
-                    } else if (isdigit(params[i][0])) {
-                        paramVals[i] = params[i];
+
+                for (unsigned int j=0; j<n_split; j++) {
+                    if (strcmp(params[j], lambda->args->values[0]) == 0) {
+                        *(char*)paramVals[j] = inputVal;
+                    } else if (isdigit(params[j][0])) {
+                        paramVals[j] = params[j];
                     }
                 }
 
-                Parameters parameters = (Parameters) { .n_values=n_split, .values=paramVals, .type=List };
+                Parameters parameters = (Parameters) { .n_values=n_split, .values=paramVals, .type=Num };
                 func f = lookup(func_name);
-                *result++ = f(&parameters);
+                result[count] = (f(&parameters) + '0');
+                count ++;
             }
 
-            printf("%s", (char *) result);
-
-            return newTypedValue(List, (char *) result);
+            return newTypedValue(Num, result);
         }
 
     }
@@ -121,7 +118,7 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *input) {
 int interpret(Stream *stream) {
     assert(stream != NULL);
 
-    TypedValue *returnVal = newTypedValue(Void, "");
+    TypedValue *returnVal = newTypedValue(Void, NULL);
     for (unsigned int i = 0; i < stream->n_lambdas; i++) {
         returnVal = interpret_lambda(stream->lambdas[i], returnVal);
     }

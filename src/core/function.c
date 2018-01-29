@@ -10,7 +10,7 @@ Type get_type(string str) {
     assert(str != NULL);
 
     if (str[0] == SQUARE_BRACKET_OPEN)
-        return List;
+        return Num;
     if (str[0] == QUOTE) {
         return Str;
     } else if (contains(str, COLON)) {
@@ -21,7 +21,7 @@ Type get_type(string str) {
 }
 
 
-TypedValue *newTypedValue(Type type, char const *value) {
+TypedValue *newTypedValue(Type type, void *value) {
     assert(value != NULL);
 
     TypedValue *typedValue = (TypedValue *) malloc(sizeof(TypedValue));
