@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 #include "../../include/function.h"
 #include "../../include/str_utils.h"
@@ -10,8 +9,6 @@
 Type get_type(string str) {
     assert(str != NULL);
 
-    if (isdigit(str[0]))
-        return Int;
     if (str[0] == SQUARE_BRACKET_OPEN)
         return List;
     if (str[0] == QUOTE) {

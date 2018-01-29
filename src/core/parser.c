@@ -30,7 +30,6 @@ TypedValue *tokenize_returnValue(char *buffer) {
 
     char *value = (char*) malloc(VAR_LEN);
     slice_until(PAREN_CLOSED, buffer, value);
-    assert(length(value) > 0);
 
     return newTypedValue(get_type(value), value);
 }

@@ -15,11 +15,6 @@ void print(TypedValue *value) {
 }
 
 
-TypedValue *execute(TypedValue* input, char **arguments, string func_name, char **parameters) {
-
-    return newTypedValue(Void, "");
-}
-
 
 TypedValue *interpret_lambda(Lambda *lambda, TypedValue *previous_return) {
     assert(lambda != NULL);
@@ -27,6 +22,7 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *previous_return) {
     TypedValue *returnVal = lambda->returnValue;
 
     if (returnVal->type == Func) {
+        // Start MAP operation over previous_return
 
         // TODO move to parser ----------
         char *buffer = strdup(returnVal->value);
@@ -43,6 +39,17 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *previous_return) {
         }
         size_t n_split = split(COLON, buffer, params);
         // TODO--------------------------
+
+        if (lambda->args->n_args == 1) {
+            char *p;
+            while ((p = (char *) previous_return->value++) != STR_NULL) {
+                if (strcmp(func_name, "print") == 0) {
+                    printf("%s", p);
+                } else if (strcmp(func_name, "+") == 0) {
+
+                }
+            }
+        }
 
         if (strcmp(func_name, "print") == 0) {
             print(previous_return);

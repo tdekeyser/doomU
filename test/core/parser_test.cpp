@@ -58,13 +58,13 @@ TEST_CASE("tokenize_returnValue") {
         REQUIRE(strcmp(returnValue->value, "\"return this\"") == 0);
     }
 
-    SECTION("parses int return value from lambda") {
-        char snip[] = "45)";
+    SECTION("parses void return value from lambda") {
+        char snip[] = ")";
 
         TypedValue *returnValue = tokenize_returnValue(snip);
 
-        REQUIRE(returnValue->type == Int);
-        REQUIRE(strcmp(returnValue->value, "45") == 0);
+        REQUIRE(returnValue->type == Void);
+        REQUIRE(strcmp(returnValue->value, "") == 0);
     }
 
     SECTION("parses list return value from lambda") {

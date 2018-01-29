@@ -5,7 +5,7 @@
 
 
 typedef enum type {
-    Void, Int, Str, List, Func
+    Void, Str, List, Func
 } Type;
 
 typedef struct typed_value {
