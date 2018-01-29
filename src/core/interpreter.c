@@ -84,20 +84,21 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *input) {
 
         if (lambda->args->n_args == 1) {
 
-            char *inputVal;
+            char inputVal;
             int *result = (int *) strdup(input->value);
-            while ((inputVal = (char *) input->value++) != STR_NULL) {
-                if (strcmp(inputVal, (char *) COMMA) == 0)
+            int i = 0;
+            while ((inputVal = input->value[i++]) != STR_NULL) {
+                if ((inputVal == COMMA) || (inputVal == SQUARE_BRACKET_OPEN) || (inputVal == SQUARE_BRACKET_CLOSED))
                     continue;
 
-                printf("%s", inputVal);
+                printf("%c", inputVal);
 
                 void **paramVals = (void **) malloc(n_split);
                 for (unsigned int i=0; i<n_split; i++) {
-                    if (params[i] == lambda->args->values[0]) {
-                        paramVals[i] = inputVal;
-                    } else if (isdigit(*inputVal)) {
-                        paramVals[i] = params;
+                    if (strcmp(params[i], lambda->args->values[0]) == 0) {
+                        paramVals[i] = &inputVal;
+                    } else if (isdigit(params[i][0])) {
+                        paramVals[i] = params[i];
                     }
                 }
 

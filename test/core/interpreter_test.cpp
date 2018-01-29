@@ -20,7 +20,7 @@ TEST_CASE("interpret_lambda") {
     SECTION("maps input to arguments and return values: 1 argument") {
         auto **args = (char**) malloc(ARG_LEN);
         args[0] = (char *) "a";
-        char func_body[] = "+:a:1";
+        char func_body[] = "add:a:1";
         Lambda *lambda = newLambda(newArguments(1, args), newTypedValue(Func, func_body));
 
         TypedValue *actual = interpret_lambda(lambda, newTypedValue(List, "[1,2,3]"));
