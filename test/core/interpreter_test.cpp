@@ -46,11 +46,11 @@ TEST_CASE("interpret_lambda") {
 
 
 TEST_CASE("interpret") {
-
-    SECTION("executes a lambda stream") {
-        Stream *stream = parse("../test/core/helloworld.du");
-
-        REQUIRE(interpret(stream) == 0);
-    }
+//
+//    SECTION("executes a lambda stream") {
+//        Stream *stream = parse("../test/core/helloworld.du");
+//
+//        REQUIRE(interpret(stream) == 0);
+//    }
 
 }

@@ -2,27 +2,69 @@
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "../../include/interpreter.h"
 #include "../../include/str_utils.h"
 #include "config.c"
 
 
+typedef struct function_parameters {
+    size_t n_values;
+    void **values;
+    Type type;
+} Parameters;
 
-void print(TypedValue *value) {
-    assert(value->type == Str);
-    printf("%s\n", value->value);
+
+int add(Parameters *p) {
+    assert(p->n_values == 2);
+
+    return (*(int *) p->values[0]) + (*(int *) p->values[1]);
+}
+
+int print(Parameters *p) {
+    assert(p->n_values == 1);
+
+    if (p->type == List) {
+        printf("%i", *(int *) p->values[0]);
+    } else if (p->type == Str) {
+        printf("hello");
+        printf("%s", (char *) p->values[0]);
+    }
+
+    return * (int *) p->values[0];
 }
 
 
+typedef int (* func) (Parameters *);
 
-TypedValue *interpret_lambda(Lambda *lambda, TypedValue *previous_return) {
+typedef struct function {
+    string name;
+    func operation;
+} Function;
+
+
+Function const addF = (Function) { .name="add", .operation=add };
+Function const printF = (Function) { .name="print", .operation=print };
+
+
+func lookup(string func_name) {
+    if (strcmp(func_name, addF.name) == 0) {
+        return addF.operation;
+    } else if (strcmp(func_name, printF.name) == 0) {
+        return printF.operation;
+    }
+    return NULL;
+}
+
+
+TypedValue *interpret_lambda(Lambda *lambda, TypedValue *input) {
     assert(lambda != NULL);
+
 
     TypedValue *returnVal = lambda->returnValue;
 
     if (returnVal->type == Func) {
-        // Start MAP operation over previous_return
 
         // TODO move to parser ----------
         char *buffer = strdup(returnVal->value);
@@ -41,22 +83,34 @@ TypedValue *interpret_lambda(Lambda *lambda, TypedValue *previous_return) {
         // TODO--------------------------
 
         if (lambda->args->n_args == 1) {
-            char *p;
-            while ((p = (char *) previous_return->value++) != STR_NULL) {
-                if (strcmp(func_name, "print") == 0) {
-                    printf("%s", p);
-                } else if (strcmp(func_name, "+") == 0) {
 
+            char *inputVal;
+            int *result = (int *) strdup(input->value);
+            while ((inputVal = (char *) input->value++) != STR_NULL) {
+                if (strcmp(inputVal, (char *) COMMA) == 0)
+                    continue;
+
+                printf("%s", inputVal);
+
+                void **paramVals = (void **) malloc(n_split);
+                for (unsigned int i=0; i<n_split; i++) {
+                    if (params[i] == lambda->args->values[0]) {
+                        paramVals[i] = inputVal;
+                    } else if (isdigit(*inputVal)) {
+                        paramVals[i] = params;
+                    }
                 }
+
+                Parameters parameters = (Parameters) { .n_values=n_split, .values=paramVals, .type=List };
+                func f = lookup(func_name);
+                *result++ = f(&parameters);
             }
+
+            printf("%s", (char *) result);
+
+            return newTypedValue(List, (char *) result);
         }
 
-        if (strcmp(func_name, "print") == 0) {
-            print(previous_return);
-            return newTypedValue(Void, "");
-        }
-
-        //return execute(previous_return, lambda->args, func_name, params);
     }
 
     return returnVal;

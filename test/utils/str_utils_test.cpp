@@ -35,7 +35,7 @@ TEST_CASE("contains") {
 TEST_CASE("no_spaces") {
 
     SECTION("is true if string contains no whitespace") {
-        REQUIRE(no_spaces("thiscontainsnospaces!") == true);
+        REQUIRE(no_spaces("thiscontainsnospaces!"));
     }
 
     SECTION("is false if string contains whitespace") {
