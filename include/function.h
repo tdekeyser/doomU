@@ -10,7 +10,7 @@ typedef enum type {
 
 typedef struct typed_value {
     Type type;
-    void *value;
+    char const *value;
 } TypedValue;
 
 typedef struct arguments {
@@ -31,17 +31,17 @@ typedef struct stream_declaration {
 
 
 Type get_type(char const *str);
-TypedValue *newTypedValue(Type type, void *value);
-void freeTypedValue(TypedValue *);
+TypedValue *new_TypedValue(Type type, char const *value);
+void free_TypedValue(TypedValue *);
 
-Arguments *newArguments(size_t, char**);
-void freeArguments(Arguments *);
+Arguments *new_Arguments(size_t, char**);
+void free_Arguments(Arguments *);
 
-Lambda *newLambda(Arguments *args, TypedValue *returnValue);
-void freeLambda(Lambda *);
+Lambda *new_Lambda(Arguments *args, TypedValue *returnValue);
+void free_Lambda(Lambda *);
 
-Stream *newStream(char const *name, Lambda **, size_t n_lambdas);
-void freeStream(Stream *);
+Stream *new_Stream(char const *name, Lambda **, size_t n_lambdas);
+void free_Stream(Stream *);
 
 
 #endif /* DOOMU_FUNCTION_H */

@@ -21,7 +21,7 @@ Arguments *tokenize_arguments(char *buffer) {
     
     size_t n_args = split(COMMA, arg_str, args);
 
-    return newArguments(n_args, args);
+    return new_Arguments(n_args, args);
 }
 
 
@@ -31,7 +31,7 @@ TypedValue *tokenize_returnValue(char *buffer) {
     char *value = (char*) malloc(VAR_LEN);
     slice_until(PAREN_CLOSED, buffer, value);
 
-    return newTypedValue(get_type(value), value);
+    return new_TypedValue(get_type(value), value);
 }
 
 
@@ -44,7 +44,7 @@ Lambda *tokenize_lambda(char *buffer) {
     skip_until(COLON, buffer);
     TypedValue *returnVal = tokenize_returnValue(buffer);
 
-    return newLambda(args, returnVal);
+    return new_Lambda(args, returnVal);
 }
 
 
@@ -58,7 +58,7 @@ Stream *tokenize_stream(char *buffer) {
         lambdas[i++] = tokenize_lambda(buffer);
     }
 
-    return newStream((char *) "main", lambdas, i);
+    return new_Stream((char *) "main", lambdas, i);
 }
 
 

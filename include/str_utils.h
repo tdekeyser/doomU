@@ -34,5 +34,7 @@ void strip(char *);
 
 void strip_leave_quotes(char *);
 
+long parse_long(char const *);
+
 
 #endif /* DOOMU_STR_UTILS_H */

@@ -21,7 +21,7 @@ Type get_type(string str) {
 }
 
 
-TypedValue *newTypedValue(Type type, void *value) {
+TypedValue *new_TypedValue(Type type, char const *value) {
     assert(value != NULL);
 
     TypedValue *typedValue = (TypedValue *) malloc(sizeof(TypedValue));
@@ -37,7 +37,7 @@ TypedValue *newTypedValue(Type type, void *value) {
 }
 
 
-Arguments *newArguments(size_t n_args, char **values) {
+Arguments *new_Arguments(size_t n_args, char **values) {
     assert(n_args <= ARG_LEN);
     assert(values != NULL);
 
@@ -54,7 +54,7 @@ Arguments *newArguments(size_t n_args, char **values) {
 }
 
 
-Lambda *newLambda(Arguments *args, TypedValue *returnValue) {
+Lambda *new_Lambda(Arguments *args, TypedValue *returnValue) {
     Lambda *lambda = (Lambda *) malloc(sizeof(Lambda));
     if (!lambda) {
         fprintf(stderr, OOM);
@@ -68,7 +68,7 @@ Lambda *newLambda(Arguments *args, TypedValue *returnValue) {
 }
 
 
-Stream *newStream(char const *name, Lambda **lambdas, size_t n_lambdas) {
+Stream *new_Stream(char const *name, Lambda **lambdas, size_t n_lambdas) {
     Stream *stream = (Stream *) malloc(sizeof(Stream));
     if (!stream) {
         fprintf(stderr, OOM);
@@ -83,14 +83,14 @@ Stream *newStream(char const *name, Lambda **lambdas, size_t n_lambdas) {
 }
 
 
-void freeTypedValue(TypedValue *typedValue) {
+void free_TypedValue(TypedValue *typedValue) {
     assert(typedValue != NULL);
 
     free(typedValue);
 }
 
 
-void freeArguments(Arguments *arguments) {
+void free_Arguments(Arguments *arguments) {
     assert(arguments != NULL);
 
     if (arguments->values != NULL)
@@ -99,23 +99,23 @@ void freeArguments(Arguments *arguments) {
     free(arguments);
 }
 
-void freeLambda(Lambda *lambda) {
+void free_Lambda(Lambda *lambda) {
     assert(lambda != NULL);
 
     if (lambda->args != NULL)
-        freeArguments(lambda->args);
+        free_Arguments(lambda->args);
     if (lambda->returnValue != NULL)
-        freeTypedValue(lambda->returnValue);
+        free_TypedValue(lambda->returnValue);
 
     free(lambda);
 }
 
 
-void freeStream(Stream *stream) {
+void free_Stream(Stream *stream) {
     assert(stream != NULL);
 
     for (unsigned int i = 0; i < stream->n_lambdas; i++) {
-        freeLambda(stream->lambdas[i]);
+        free_Lambda(stream->lambdas[i]);
     }
     free(stream);
 }

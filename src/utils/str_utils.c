@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <errno.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -110,5 +112,16 @@ void strip_leave_quotes(char *str) {
     }
 
     *tmp = STR_NULL;
+}
+
+
+long parse_long(char const *str) {
+    char *error;
+    errno = 0;
+    long l = strtoll(str, &error, 0);
+
+    assert(*error == 0);
+    assert(errno == 0);
+    return l;
 }
 

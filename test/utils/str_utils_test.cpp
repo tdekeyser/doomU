@@ -215,3 +215,11 @@ TEST_CASE("strip_leave_quotes") {
 
 }
 
+
+TEST_CASE("parse_long") {
+
+    SECTION("parses string as long") {
+        REQUIRE(parse_long("123") == 123l);
+    }
+
+}

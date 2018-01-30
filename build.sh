@@ -11,7 +11,7 @@ if [ $1 == "test" ]
     then
         cmake .. -DSOURCE=OFF -DTEST=ON
         make
-        ./doomU_test
+        ./doomU_test $2
     else
         cmake .. -DSOURCE=ON -DTEST=OFF
         make

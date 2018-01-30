@@ -1,58 +1,42 @@
-
 #include "../Catch/catch.hpp"
-#include "../../include/parser.h"
 #include "../../src/core/interpreter.c"
 
 
-TEST_CASE("interpret_lambda") {
-
-    SECTION("maps input to arguments and return values: 0 arguments") {
-        auto **args = (char**) malloc(ARG_LEN);
-        char hello[] = "\"Hello world!\"";
-        Lambda *lambda = newLambda(newArguments(0, args), newTypedValue(Str, hello));
-
-        TypedValue *actual = interpret_lambda(lambda, nullptr);
-
-        REQUIRE(actual->type == Str);
-        REQUIRE(memcmp(actual->value, hello, sizeof(actual->value)) == 0);
+bool is_equal(StreamElement *first, StreamElement *second) {
+    if (first->next != NULL) {
+        if (second->next != NULL)
+            return is_equal(first->next, second->next);
+        return false;
     }
+    if (second->next != NULL)
+        return false;
 
-    SECTION("maps input to arguments and return values: 1 argument") {
-        long input[] = {1,2,3};
-        auto **args = (char**) malloc(ARG_LEN);
-        args[0] = (char *) "a";
-        char func_body[] = "add:a:1";
-        Lambda *lambda = newLambda(newArguments(1, args), newTypedValue(Func, func_body));
-
-        TypedValue *actual = interpret_lambda(lambda, newTypedValue(Num, input));
-
-        long expected[] = {2,3,4};
-        REQUIRE(actual->type == Num);
-        REQUIRE(memcmp(actual->value, expected, sizeof(actual->value)) == 0);
-    }
-
-//    SECTION("can print a value from a lambda") {
-//        auto **args = (char**) malloc(ARG_LEN);
-//        args[0] = (char *) "a";
-//        char print[] = "print:a";
-//        char hello[] = "\"Hello world!\"";
-//        Lambda *lambda = newLambda(newArguments(1, args), newTypedValue(Func, print));
-//
-//        TypedValue *actual = interpret_lambda(lambda, newTypedValue(Str, hello));
-//
-//        REQUIRE(actual->type == List);
-//        REQUIRE(strcmp(actual->value, "") == 0);
-//    }
-
+    return (first->type == second->type) && (first->value == second->value);
 }
 
 
-TEST_CASE("interpret") {
-//
-//    SECTION("executes a lambda stream") {
-//        Stream *stream = parse("../test/core/helloworld.du");
-//
-//        REQUIRE(interpret(stream) == 0);
-//    }
+TEST_CASE("read_as_stream") {
 
+    SECTION("read_num_as_stream reads a list of long as a linked list") {
+        char a_string[] = "[10,20,30]";
+        StreamElement *first = new_StreamElement(Num, 10l);
+        StreamElement *second = new_StreamElement(Num, 20l);
+        StreamElement *third = new_StreamElement(Num, 30l);
+        first->next = second; second->next = third;
+
+        StreamElement *actual = read_num_as_stream(a_string);
+
+        REQUIRE(is_equal(actual, first));
+    }
+
+    SECTION("read_string_as_stream reads a string as a linked list") {
+
+    }
+
+}
+
+TEST_CASE("map") {
+}
+
+TEST_CASE("interpret") {
 }
