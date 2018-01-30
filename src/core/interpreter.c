@@ -55,8 +55,14 @@ StreamElement *append(StreamElement *head, StreamElement *element) {
 /////////////////////////////
 
 StreamElement *read_string_as_stream(char *value) {
-    assert(false);
-    return NULL;
+    StreamElement *head = NULL;
+    char c;
+    while ((c = *value++) != STR_NULL) {
+        if (c == QUOTE)
+            continue;
+        head = append(head, new_StreamElement(Str, (long) c));
+    }
+    return head;
 }
 
 // TODO to parser??
@@ -91,6 +97,7 @@ StreamElement *read_as_stream(TypedValue *init_return_value) {
     if (init_return_value->type == Num)
         return read_num_as_stream((char *) init_return_value->value);
 
+    assert(false && "Input type not recognized.");
     return NULL;
 }
 

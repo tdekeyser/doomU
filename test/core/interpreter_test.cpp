@@ -30,7 +30,16 @@ TEST_CASE("read_as_stream") {
     }
 
     SECTION("read_string_as_stream reads a string as a linked list") {
+        char a_string[] = "Hi?!";
+        StreamElement *first = new_StreamElement(Str, (long) 'H');
+        StreamElement *second = new_StreamElement(Str, (long) 'i');
+        StreamElement *third = new_StreamElement(Str, (long) '?');
+        StreamElement *fourth = new_StreamElement(Str, (long) '!');        
+        first->next = second; second->next = third; third->next = fourth;
 
+        StreamElement *actual = read_string_as_stream(a_string);     
+
+        REQUIRE(is_equal(actual, first));
     }
 
 }
