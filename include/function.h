@@ -20,7 +20,7 @@ typedef struct arguments {
 
 typedef struct anonymous_function_declaration {
     Arguments *args;
-    TypedValue *returnValue;
+    TypedValue *operation;
 } Lambda;
 
 typedef struct stream_declaration {

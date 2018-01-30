@@ -62,7 +62,7 @@ Lambda *new_Lambda(Arguments *args, TypedValue *returnValue) {
     }
 
     lambda->args = args;
-    lambda->returnValue = returnValue;
+    lambda->operation = returnValue;
 
     return lambda;
 }
@@ -104,8 +104,8 @@ void free_Lambda(Lambda *lambda) {
 
     if (lambda->args != NULL)
         free_Arguments(lambda->args);
-    if (lambda->returnValue != NULL)
-        free_TypedValue(lambda->returnValue);
+    if (lambda->operation != NULL)
+        free_TypedValue(lambda->operation);
 
     free(lambda);
 }

@@ -3,12 +3,12 @@
 
 
 bool is_equal(StreamElement *first, StreamElement *second) {
-    if (first->next != NULL) {
-        if (second->next != NULL)
+    if (first->next != nullptr) {
+        if (second->next != nullptr)
             return is_equal(first->next, second->next);
         return false;
     }
-    if (second->next != NULL)
+    if (second->next != nullptr)
         return false;
 
     return (first->type == second->type) && (first->value == second->value);
@@ -44,7 +44,28 @@ TEST_CASE("read_as_stream") {
 
 }
 
+
 TEST_CASE("map") {
+
+    SECTION("applies a lambda operation to all elements of the stream") {
+        StreamElement *first = new_StreamElement(Num, 10l);
+        StreamElement *second = new_StreamElement(Num, 20l);
+        first->next = second;
+        auto **args = (char**) malloc(ARG_LEN);
+        args[0] = (char *) "a";
+        char func_body[] = "add:a:5";
+        Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
+
+        int result = map(first, lambda);
+
+        StreamElement *expectedFirst = new_StreamElement(Num, 15l);
+        StreamElement *expectedSecond = new_StreamElement(Num, 25l);
+        expectedFirst->next = expectedSecond;
+        REQUIRE(is_equal(expectedFirst, first));
+        REQUIRE(result == 0);
+        free(lambda);
+    }
+
 }
 
 TEST_CASE("interpret") {

@@ -66,7 +66,7 @@ StreamElement *read_string_as_stream(char *value) {
 }
 
 // TODO to parser??
-size_t parse_list(char*buffer, size_t len_buffer, char **elements) {
+size_t parse_list(char *buffer, size_t len_buffer, char **elements) {
     assert(buffer != NULL);
     assert(len_buffer > 0);
 
@@ -102,9 +102,72 @@ StreamElement *read_as_stream(TypedValue *init_return_value) {
 }
 
 
-int map(StreamElement *input, Lambda *lambda) {
-    // change input by applying lambda on it
-    // returns OK or NOT OK
+// TODO move to parser ??
+size_t parse_operation(char *buffer, char *func_name, char **params) {
+    slice_until(COLON, buffer, func_name);
+    return split(COLON, buffer, params);
+}
+
+
+typedef struct MapParameters {
+    size_t len;
+    long *values;
+} MapParameters;
+
+
+long add(MapParameters *parameters) {
+    assert(parameters->len == 2);
+    return parameters->values[0] + parameters->values[1];
+}
+
+
+typedef long (* Operation) (MapParameters *);
+typedef struct Function {
+    char const *name;
+    Operation operation;
+} Function;
+
+
+Operation lookup(string func_name) {
+    Function addFunction = (Function) { .name="add", .operation=add };
+
+    if (strcmp(func_name, addFunction.name) == 0) {
+     return addFunction.operation;
+    }
+
+    assert(false && "Function name not found.");
+    return NULL;
+}
+
+
+int map(StreamElement *head, Lambda *lambda) {
+    assert(head != NULL);
+    assert(lambda != NULL);
+    assert(lambda->operation->type == Func);
+
+    char func_name[VAR_LEN];
+    char *params[ARG_LEN];
+    size_t n_params = parse_operation((char *) lambda->operation->value, func_name, params);
+
+    StreamElement *tmp = head;
+    do {
+
+        long map_params[n_params];
+        for (unsigned int i = 0; i < n_params; i++) {
+            if (strcmp(params[i], lambda->args->values[0]) == 0) {
+                // TODO this is a shortcut that prevents using multiple arguments in a lambda!!
+                map_params[i] = tmp->value;
+            } else if (isdigit(params[i][0])) {
+                map_params[i] = parse_long(params[i]);
+            }
+        }
+
+        MapParameters parameters = (MapParameters) { .len=n_params, .values=map_params };
+        Operation operation = lookup(func_name);
+        tmp->value = operation(&parameters);
+
+    } while ((tmp = tmp->next) != NULL);
+
     return 0;
 }
 

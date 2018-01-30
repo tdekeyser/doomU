@@ -60,58 +60,57 @@
 
 // TypedValue *interpret_lambda(Lambda *lambda, TypedValue *input) {
 //     assert(lambda != NULL);
-//     return NULL;
-
-    // TypedValue *returnVal = lambda->returnValue;
-
-    // if (returnVal->type == Func) {
-
-    //     // TODO move to parser ----------
-    //     char *buffer = strdup((const char*) returnVal->value);
-    //     char func_name[VAR_LEN];
-
-    //     // get func name
-    //     slice_until(COLON, buffer, func_name);
-
-    //     // get func params
-    //     char **params = (char **) malloc(ARG_LEN);
-    //     if (!params) {
-    //         fprintf(stderr, OOM);
-    //         return NULL;
-    //     }
-    //     size_t n_split = split(COLON, buffer, params);
-    //     // TODO--------------------------
-
-    //     if (lambda->args->n_args == 1) {
-
-    //         char inputVal;
-    //         long *result = (long *) malloc(3);
-    //         int i = 0;
-    //         int count = 0;
-    //         while ((inputVal = ((char *) input->value)[i++]) != NULL) {
-
-    //             void **paramVals = (void **) malloc(n_split);
-
-    //             for (unsigned int j=0; j<n_split; j++) {
-    //                 if (strcmp(params[j], lambda->args->values[0]) == 0) {
-    //                     *(char*)paramVals[j] = inputVal;
-    //                 } else if (isdigit(params[j][0])) {
-    //                     paramVals[j] = params[j];
-    //                 }
-    //             }
-
-    //             Parameters parameters = (Parameters) { .n_values=n_split, .values=paramVals, .type=Num };
-    //             func f = lookup(func_name);
-    //             result[count] = (f(&parameters) + '0');
-    //             count ++;
-    //         }
-
-    //         return newTypedValue(Num, result);
-    //     }
-
-    // }
-
-    // return returnVal;
+//
+//     TypedValue *returnVal = lambda->operation;
+//
+//     if (returnVal->type == Func) {
+//
+//         // TODO move to parser ----------
+//         char *buffer = strdup((const char*) returnVal->value);
+//         char func_name[VAR_LEN];
+//
+//         // get func name
+//         slice_until(COLON, buffer, func_name);
+//
+//         // get func params
+//         char **params = (char **) malloc(ARG_LEN);
+//         if (!params) {
+//             fprintf(stderr, OOM);
+//             return NULL;
+//         }
+//         size_t n_split = split(COLON, buffer, params);
+//         // TODO--------------------------
+//
+//         if (lambda->args->n_args == 1) {
+//
+//             char inputVal;
+//             long *result = (long *) malloc(3);
+//             int i = 0;
+//             int count = 0;
+//             while ((inputVal = ((char *) input->value)[i++]) != NULL) {
+//
+//                 void **paramVals = (void **) malloc(n_split);
+//
+//                 for (unsigned int j=0; j<n_split; j++) {
+//                     if (strcmp(params[j], lambda->args->values[0]) == 0) {
+//                         *(char*)paramVals[j] = inputVal;
+//                     } else if (isdigit(params[j][0])) {
+//                         paramVals[j] = params[j];
+//                     }
+//                 }
+//
+//                 Parameters parameters = (Parameters) { .n_values=n_split, .values=paramVals, .type=Num };
+//                 func f = lookup(func_name);
+//                 result[count] = (f(&parameters) + '0');
+//                 count ++;
+//             }
+//
+//             return newTypedValue(Num, result);
+//         }
+//
+//     }
+//
+//     return returnVal;
 //}
 
 

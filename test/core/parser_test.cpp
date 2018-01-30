@@ -12,8 +12,8 @@ TEST_CASE("tokenize_lambda") {
 
         Lambda *lambda = tokenize_lambda(a_func_text);
 
-        REQUIRE(lambda->returnValue->type == Str);
-        REQUIRE(strcmp(lambda->returnValue->value, "\"boo!\"") == 0);
+        REQUIRE(lambda->operation->type == Str);
+        REQUIRE(strcmp(lambda->operation->value, "\"boo!\"") == 0);
         REQUIRE(strcmp(lambda->args->values[0], "a") == 0);
         REQUIRE(strcmp(lambda->args->values[1], "b") == 0);
     }
@@ -97,9 +97,9 @@ TEST_CASE("parse") {
 
         REQUIRE(strcmp(actual->name, "main") == 0);
         REQUIRE(actual->lambdas[0]->args->values[0] == NULL);
-        REQUIRE(strcmp(actual->lambdas[0]->returnValue->value, "\"Hello world!\"") == 0);
+        REQUIRE(strcmp(actual->lambdas[0]->operation->value, "\"Hello world!\"") == 0);
         REQUIRE(strcmp(actual->lambdas[1]->args->values[0], "a") == 0);
-        REQUIRE(strcmp(actual->lambdas[1]->returnValue->value, "print:a") == 0);
+        REQUIRE(strcmp(actual->lambdas[1]->operation->value, "print:a") == 0);
         REQUIRE(actual->n_lambdas == 2);
     }
 
