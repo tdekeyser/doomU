@@ -1,4 +1,5 @@
 #include "../Catch/catch.hpp"
+#include "../../include/parser.h"
 #include "../../src/core/interpreter.c"
 
 
@@ -47,13 +48,13 @@ TEST_CASE("read_as_stream") {
 
 TEST_CASE("map") {
 
-    SECTION("applies a lambda operation to all elements of the stream") {
+    SECTION("applies addition to all elements of the stream: 1 argument") {
         StreamElement *first = new_StreamElement(Num, 10l);
         StreamElement *second = new_StreamElement(Num, 20l);
         first->next = second;
         auto **args = (char**) malloc(ARG_LEN);
         args[0] = (char *) "a";
-        char func_body[] = "add:a:5";
+        char func_body[] = "add:5:a";
         Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
 
         int result = map(first, lambda);
@@ -66,7 +67,58 @@ TEST_CASE("map") {
         free(lambda);
     }
 
+    SECTION("applies print string to all elements of the stream: 1 argument") {
+        StreamElement *first = new_StreamElement(Str, (long) 'H');
+        StreamElement *second = new_StreamElement(Str, (long) 'i');
+        first->next = second;
+        auto **args = (char**) malloc(ARG_LEN);
+        args[0] = (char *) "a";
+        char func_body[] = "prints:a";
+        Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
+
+        int result = map(first, lambda);
+
+        StreamElement *expectedFirst = new_StreamElement(Str, (long) 'H');
+        StreamElement *expectedSecond = new_StreamElement(Str, (long) 'i');
+        expectedFirst->next = expectedSecond;
+        REQUIRE(is_equal(expectedFirst, first));
+        REQUIRE(result == 0);
+        free(lambda);
+    }
+
+    SECTION("applies print integer to all elements of the stream: 1 argument") {
+        StreamElement *first = new_StreamElement(Num, 10l);
+        StreamElement *second = new_StreamElement(Num, 20l);
+        first->next = second;
+        auto **args = (char**) malloc(ARG_LEN);
+        args[0] = (char *) "a";
+        char func_body[] = "printi:a";
+        Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
+
+        int result = map(first, lambda);
+
+        StreamElement *expectedFirst = new_StreamElement(Num, 10l);
+        StreamElement *expectedSecond = new_StreamElement(Num, 20l);
+        expectedFirst->next = expectedSecond;
+        REQUIRE(is_equal(expectedFirst, first));
+        REQUIRE(result == 0);
+        free(lambda);
+    }
+
 }
 
 TEST_CASE("interpret") {
+
+    SECTION("prints hello world") {
+       Stream *stream = parse("../test/core/helloworld.du");
+
+       REQUIRE(interpret(stream) == 0);
+   }
+
+   SECTION("prints a list of integers added five") {
+        Stream *stream = parse("../test/core/map.du");
+
+       REQUIRE(interpret(stream) == 0);
+   }
+
 }

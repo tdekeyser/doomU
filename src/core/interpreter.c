@@ -91,11 +91,11 @@ StreamElement *read_num_as_stream(char *buffer) {
 
 
 // Reads output of the first lambda as input for the stream.
-StreamElement *read_as_stream(TypedValue *init_return_value) {
-    if (init_return_value->type == Str)
-        return read_string_as_stream((char *) init_return_value->value);
-    if (init_return_value->type == Num)
-        return read_num_as_stream((char *) init_return_value->value);
+StreamElement *read_as_stream(TypedValue *init_operation) {
+    if (init_operation->type == Str)
+        return read_string_as_stream((char *) init_operation->value);
+    if (init_operation->type == Num)
+        return read_num_as_stream((char *) init_operation->value);
 
     assert(false && "Input type not recognized.");
     return NULL;
@@ -120,6 +120,18 @@ long add(MapParameters *parameters) {
     return parameters->values[0] + parameters->values[1];
 }
 
+long printi(MapParameters *parameters) {
+    assert(parameters->len == 1);
+    printf("%lu ", parameters->values[0]);
+    return parameters->values[0];
+}
+
+long prints(MapParameters *parameters) {
+    assert(parameters->len == 1);
+    printf("%c", (char) parameters->values[0]);
+    return parameters->values[0];
+}
+
 
 typedef long (* Operation) (MapParameters *);
 typedef struct Function {
@@ -128,11 +140,17 @@ typedef struct Function {
 } Function;
 
 
-Operation lookup(string func_name) {
-    Function addFunction = (Function) { .name="add", .operation=add };
+static Function const functions[] = {
+    (Function) { .name="add", .operation=add },
+    (Function) { .name="printi", .operation=printi },
+    (Function) { .name="prints", .operation=prints },    
+};
 
-    if (strcmp(func_name, addFunction.name) == 0) {
-     return addFunction.operation;
+Operation lookup(string func_name) {
+    int i = 0;
+    for (unsigned int i = 0; i < 3; i++) {
+        if (strcmp(functions[i].name, func_name) == 0)
+            return functions[i].operation;
     }
 
     assert(false && "Function name not found.");
@@ -176,8 +194,15 @@ int interpret(Stream *stream) {
     assert(stream != NULL);
 
     // first read the output of the first lambda as streamcontent
+    StreamElement *head = read_as_stream(stream->lambdas[0]->operation);
 
     // then map the streamcontent according to the following lambdas
+    for (unsigned int i = 1; i < stream->n_lambdas; i++) {
+        map(head, stream->lambdas[i]);
+    }
+
+    // free streamelements
+    free_StreamElement(head);
 
     free_Stream(stream);
     return 0;

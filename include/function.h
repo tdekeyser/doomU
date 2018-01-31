@@ -8,22 +8,22 @@ typedef enum type {
     Void, Str, Num, Func
 } Type;
 
-typedef struct typed_value {
+typedef struct TypedValue {
     Type type;
     char const *value;
 } TypedValue;
 
-typedef struct arguments {
+typedef struct Arguments {
     size_t n_args;
     char **values;
 } Arguments;
 
-typedef struct anonymous_function_declaration {
+typedef struct Lambda {
     Arguments *args;
     TypedValue *operation;
 } Lambda;
 
-typedef struct stream_declaration {
+typedef struct Stream {
     char const *name;
     size_t n_lambdas;
     Lambda **lambdas;

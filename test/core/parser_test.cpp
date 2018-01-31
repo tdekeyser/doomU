@@ -99,7 +99,7 @@ TEST_CASE("parse") {
         REQUIRE(actual->lambdas[0]->args->values[0] == NULL);
         REQUIRE(strcmp(actual->lambdas[0]->operation->value, "\"Hello world!\"") == 0);
         REQUIRE(strcmp(actual->lambdas[1]->args->values[0], "a") == 0);
-        REQUIRE(strcmp(actual->lambdas[1]->operation->value, "print:a") == 0);
+        REQUIRE(strcmp(actual->lambdas[1]->operation->value, "prints:a") == 0);
         REQUIRE(actual->n_lambdas == 2);
     }
 

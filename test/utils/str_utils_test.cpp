@@ -131,9 +131,10 @@ TEST_CASE("split") {
 
         char *actual[1];
 
-        split(COMMA, another_string, actual);
+        size_t n_split = split(COMMA, another_string, actual);
 
         REQUIRE(strcmp(actual[0], another_split_string[0]) == 0);
+        REQUIRE(n_split == 1);
     }
 
     SECTION("returns number of split elements") {
