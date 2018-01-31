@@ -5,54 +5,12 @@
 #include <stdio.h>
 
 #include "../../include/interpreter.h"
+#include "../../include/operation.h"
 #include "../../include/str_utils.h"
+#include "../../include/function.h"
 #include "config.c"
 
 
-
-/////// SHOULD BE MOVED TO FUNCTION_H
-
-typedef struct StreamElement {
-    Type type;
-    long value;
-    struct StreamElement *next;
-} StreamElement;
-
-StreamElement *new_StreamElement(Type type, long value) {
-    StreamElement *element = (StreamElement *) malloc(sizeof(StreamElement));
-    if (!element) {
-        fprintf(stderr, OOM);
-        return NULL;
-    }
-
-    element->type = type;
-    element->value = value;
-    element->next = NULL;
-    return element;
-}
-
-void free_StreamElement(StreamElement *first) {
-    assert(first != NULL);
-
-    if (first->next != NULL)
-        free_StreamElement(first->next);
-    
-    free(first);
-}
-
-StreamElement *append(StreamElement *head, StreamElement *element) {
-    if (head == NULL) {
-        head = element;
-    } else {
-        StreamElement *previous = head;
-        while (previous->next != NULL)
-            previous = previous->next;
-        previous->next = element;
-    }
-    return head;
-}
-
-/////////////////////////////
 
 StreamElement *read_string_as_stream(char *value) {
     StreamElement *head = NULL;
@@ -106,55 +64,6 @@ StreamElement *read_as_stream(TypedValue *init_operation) {
 size_t parse_operation(char *buffer, char *func_name, char **params) {
     slice_until(COLON, buffer, func_name);
     return split(COLON, buffer, params);
-}
-
-
-typedef struct MapParameters {
-    size_t len;
-    long *values;
-} MapParameters;
-
-
-long add(MapParameters *parameters) {
-    assert(parameters->len == 2);
-    return parameters->values[0] + parameters->values[1];
-}
-
-long printi(MapParameters *parameters) {
-    assert(parameters->len == 1);
-    printf("%lu ", parameters->values[0]);
-    return parameters->values[0];
-}
-
-long prints(MapParameters *parameters) {
-    assert(parameters->len == 1);
-    printf("%c", (char) parameters->values[0]);
-    return parameters->values[0];
-}
-
-
-typedef long (* Operation) (MapParameters *);
-typedef struct Function {
-    char const *name;
-    Operation operation;
-} Function;
-
-
-static Function const functions[] = {
-    (Function) { .name="add", .operation=add },
-    (Function) { .name="printi", .operation=printi },
-    (Function) { .name="prints", .operation=prints },    
-};
-
-Operation lookup(string func_name) {
-    int i = 0;
-    for (unsigned int i = 0; i < 3; i++) {
-        if (strcmp(functions[i].name, func_name) == 0)
-            return functions[i].operation;
-    }
-
-    assert(false && "Function name not found.");
-    return NULL;
 }
 
 
