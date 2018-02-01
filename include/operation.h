@@ -18,6 +18,10 @@ Operation lookup(char const *func_name);
 // ###################
 // BUILT-IN OPERATIONS
 // ###################
-long add(MapParameters *parameters);
-long printi(MapParameters *parameters);
-long prints(MapParameters *parameters);
+long add(MapParameters *);
+long subtract(MapParameters *);
+long multiply(MapParameters *);
+long mod(MapParameters *);
+
+long printi(MapParameters *);
+long prints(MapParameters *);

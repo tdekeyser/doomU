@@ -3,17 +3,42 @@
 #include "../../src/core/operation.c"
 
 
-// TODO add tests
-TEST_CASE("add") {
+TEST_CASE("operations") {
 
-//    SECTION("makes the sum of two parameter inputs") {
-//        int i = 100, j = 25;
-//        long *paramValues[] = { 100l, 25l };
-//        Parameters p = (Parameters) { .n_values=2, .values=paramValues, .type=Num };
-//        REQUIRE(add(&p) == 125);
+    SECTION("add") {
+        long values[] = { 10l, 30l };
+        MapParameters params = (MapParameters) { .len=2, .values=values };
 
-//        free(p.values);
-//    }
+        REQUIRE(add(&params) == 40l);
+    }
+
+    SECTION("subtract") {
+        long values[] = { 450l, 10l };
+        MapParameters params = (MapParameters) { .len=2, .values=values };
+
+        REQUIRE(subtract(&params) == 440l);
+    }
+
+    SECTION("subtract: negative values") {
+        long values[] = { 10l, 450l };
+        MapParameters params = (MapParameters) { .len=2, .values=values };
+
+        REQUIRE(subtract(&params) == -440l);
+    }
+
+    SECTION("multiply") {
+        long values[] = { 100l, 4l };
+        MapParameters params = (MapParameters) { .len=2, .values=values };
+
+        REQUIRE(multiply(&params) == 400l);
+    }
+
+    SECTION("mod") {
+        long values[] = { 23l, 5l };
+        MapParameters params = (MapParameters) { .len=2, .values=values };
+
+        REQUIRE(mod(&params) == 3l);
+    }
 
 }
 

@@ -27,20 +27,35 @@ Operation lookup(char const *func_name) {
 // ###################
 // BUILT-IN OPERATIONS
 // ###################
-long add(MapParameters *parameters) {
-    assert(parameters->len == 2);
-    return parameters->values[0] + parameters->values[1];
+long add(MapParameters *params) {
+    assert(params->len == 2);
+    return params->values[0] + params->values[1];
 }
 
-long printi(MapParameters *parameters) {
-    assert(parameters->len == 1);
-    printf("%lu ", parameters->values[0]);
-    return parameters->values[0];
+long subtract(MapParameters *params) {
+    assert(params->len == 2);
+    return params->values[0] - params->values[1];
 }
 
-long prints(MapParameters *parameters) {
-    assert(parameters->len == 1);
-    printf("%c", (char) parameters->values[0]);
-    return parameters->values[0];
+long multiply(MapParameters *params) {
+    assert(params->len == 2);
+    return params->values[0] * params->values[1];
+}
+
+long mod(MapParameters *params) {
+    assert(params->len == 2);
+    return params->values[0] % params->values[1];
+}
+
+long printi(MapParameters *params) {
+    assert(params->len == 1);
+    printf("%lu ", params->values[0]);
+    return params->values[0];
+}
+
+long prints(MapParameters *params) {
+    assert(params->len == 1);
+    printf("%c", (char) params->values[0]);
+    return params->values[0];
 }
 
