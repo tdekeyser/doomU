@@ -1,36 +1,48 @@
 ## Development of `doomU` programming language
 
-doomU is a simple programming language based on functional programming and especially the streaming API.
+doomU is a programming language based on functional programming and especially the streaming API.
 
-It can be used to quickly perform http calls and using the responses for your own good.
+#### Current syntax
+`helloworld.du`
+```
+#!doomU
 
-### Goal syntax
+(
+    (() : "hello world!")
+    ,
+    ((a) : prints:a )
+)
+```
+
+`operations.du`
+```
+#!doomU
+
+(
+    (()  : [1, 2, 3, 4, 5] )
+    ,
+    ((i) : add:i:10 )
+    ,
+    ((i) : subtract:50:i )
+    ,
+    ((k) : multiply:k:k )
+    ,
+    ((m) : mod:m:7)
+    ,
+    ((a) : printi:a )
+)
+```
+
+#### Target syntax
 
 `helloworld.du`
 ```
 #!doomU
 
 (
-    (
-        "hello world!"
-    )
+    "hello world!"
     ,
-    d_print
-)
-```
-
-`findInUrl.du`
-```
-#!doomU
-
-(
-    d_get “blabla.com"
-    ,
-    d_search “hello world!” > results
-    ,
-    d_create file “world.txt” > worldFile
-    ,
-    d_write results worldFile
+    prints
 )
 ```
 
@@ -40,20 +52,18 @@ It can be used to quickly perform http calls and using the responses for your ow
 
 // Variable
 listOfTen (
-    d_of 1..10 // implies () : d_of 1..10
+    stream_of:1:10
 )
 
 // Function
 sum (
     (a, b) : a + b
-    ;
-    (a) : a
 )
 power (
     (a) : a*a
 )
 
-// Anonymous function
+// Anonymous main function
 (
     listOfTen
     ,
@@ -61,7 +71,22 @@ power (
     ,
     sum
     ,
-    d_print
+    printi
+)
+```
+
+`findInUrl.du`
+```
+#!doomU
+
+(
+    get “blabla.com"
+    ,
+    search:“hello world!” > results
+    ,
+    create_file:“world.txt” > worldFile
+    ,
+    write:results:worldFile
 )
 ```
 
@@ -72,9 +97,6 @@ $ doomU helloworld.du
 ```
 
 ### Development
-1. Tokenizer (A lexer is a software program that performs lexical analysis.  Lexical analysis is the process of separating a stream of characters into different words, which in computer science we call 'tokens'.)
-2. Parser (A parser goes one level further than the lexer and takes the tokens produced by the lexer and tries to determine if proper sentences have been formed.)
-
-Source: https://www.quora.com/What-is-the-difference-between-a-lexer-and-a-parser
-
-3. Integrator, which performs the requested stream.
+1. Parser: the parser reads a file and strips it down into typed pieces
+2. Interpreter: the interpreter receives the input from the parser and executes the pieces as a program
+3. Operations: built-in functionalities that can be used in programs
