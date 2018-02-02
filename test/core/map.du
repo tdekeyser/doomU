@@ -1,7 +1,13 @@
 (
-    (() : [1, 2, 3, 4])
+    (()  : [1, 2, 3, 4, 5] )
     ,
-    ((a) : add:a:10)
+    ((i) : add:i:10 )
     ,
-    ((a) : printi:a)
+    ((i) : subtract:50:i )
+    ,
+    ((k) : multiply:k:k )
+    ,
+    ((m) : mod:m:7)
+    ,
+    ((a) : printi:a )
 )

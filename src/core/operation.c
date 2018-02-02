@@ -7,14 +7,18 @@
 
 static Function const functions[] = {
     (Function) { .name="add", .operation=add },
+    (Function) { .name="subtract", .operation=subtract },
+    (Function) { .name="multiply", .operation=multiply },
+    (Function) { .name="mod", .operation=mod },
+    
     (Function) { .name="printi", .operation=printi },
-    (Function) { .name="prints", .operation=prints },    
+    (Function) { .name="prints", .operation=prints },  
 };
 
 // TODO get length of function list
 Operation lookup(char const *func_name) {
     int i = 0;
-    for (unsigned int i = 0; i < 3; i++) {
+    for (unsigned int i = 0; i < 6; i++) {
         if (strcmp(functions[i].name, func_name) == 0)
             return functions[i].operation;
     }
