@@ -148,7 +148,7 @@ void free_StreamElement(StreamElement *first) {
 
     if (first->next != NULL)
         free_StreamElement(first->next);
-    
+
     free(first);
 }
 

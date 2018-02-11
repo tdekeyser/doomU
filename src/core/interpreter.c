@@ -1,13 +1,11 @@
 #include <string.h>
 #include <assert.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
 
 #include "../../include/interpreter.h"
 #include "../../include/operation.h"
 #include "../../include/str_utils.h"
-#include "../../include/function.h"
 #include "config.c"
 
 
@@ -102,17 +100,12 @@ int map(StreamElement *head, Lambda *lambda) {
 int interpret(Stream *stream) {
     assert(stream != NULL);
 
-    // first read the output of the first lambda as streamcontent
     StreamElement *head = read_as_stream(stream->lambdas[0]->operation);
 
-    // then map the streamcontent according to the following lambdas
     for (unsigned int i = 1; i < stream->n_lambdas; i++) {
         map(head, stream->lambdas[i]);
     }
 
-    // free streamelements
     free_StreamElement(head);
-
-    free_Stream(stream);
     return 0;
 }

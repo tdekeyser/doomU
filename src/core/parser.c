@@ -11,14 +11,14 @@ Arguments *tokenize_arguments(char *buffer) {
     assert(buffer != NULL);
 
     char arg_str[VAR_LEN * ARG_LEN];
-    char **args = (char**) malloc(ARG_LEN);
+    char **args = (char **) malloc(ARG_LEN);
     if (!args) {
         fprintf(stderr, OOM);
     }
 
     slice_until(PAREN_CLOSED, buffer, arg_str);
     assert((length(buffer) > 0)); // Syntax error: no closing parentheses found
-    
+
     size_t n_args = split(COMMA, arg_str, args);
 
     return new_Arguments(n_args, args);
@@ -28,7 +28,7 @@ Arguments *tokenize_arguments(char *buffer) {
 TypedValue *tokenize_returnValue(char *buffer) {
     assert(buffer != NULL);
 
-    char *value = (char*) malloc(VAR_LEN);
+    char *value = (char *) malloc(VAR_LEN);
     slice_until(PAREN_CLOSED, buffer, value);
 
     return new_TypedValue(get_type(value), value);
@@ -71,13 +71,12 @@ Stream *parse(string filename) {
 
     if (file) {
 
-        size_t n_read;
-        while ((n_read = fread(buffer, sizeof(char), BUFFER, file)) > 0) {
+        while ((fread(buffer, sizeof(char), BUFFER, file)) > 0) {
             strip_leave_quotes(buffer);
             return tokenize_stream(buffer);
         }
 
-        fclose(file);  
+        fclose(file);
     } else {
         fprintf(stderr, "An error occurred while reading file with filename '%s'", filename);
     }

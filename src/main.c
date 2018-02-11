@@ -8,5 +8,8 @@ int main(int argc, char *argv[]) {
     assert(argc > 0);
 
     Stream *stream = parse(argv[1]);
-    return interpret(stream);
+    int success = interpret(stream);
+
+    free_Stream(stream);
+    return success;
 }

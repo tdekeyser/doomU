@@ -11,7 +11,7 @@ size_t length(string str) {
 
     size_t i = 0;
     while (str[i++] != STR_NULL);
-    return i-1;
+    return i - 1;
 }
 
 
@@ -105,9 +105,9 @@ void strip_leave_quotes(char *str) {
         if (*str == QUOTE)
             in_quote = in_quote ? false : true;
 
-        if (isspace(*str) && !in_quote && str++) 
+        if (isspace(*str) && !in_quote && str++)
             continue;
-        
+
         *tmp++ = *str++;
     }
 

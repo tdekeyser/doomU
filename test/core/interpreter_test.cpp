@@ -23,11 +23,15 @@ TEST_CASE("read_as_stream") {
         StreamElement *first = new_StreamElement(Num, 10l);
         StreamElement *second = new_StreamElement(Num, 20l);
         StreamElement *third = new_StreamElement(Num, 30l);
-        first->next = second; second->next = third;
+        first->next = second;
+        second->next = third;
 
         StreamElement *actual = read_num_as_stream(a_string);
 
         REQUIRE(is_equal(actual, first));
+
+        free_StreamElement(first);
+        free_StreamElement(actual);
     }
 
     SECTION("read_string_as_stream reads a string as a linked list") {
@@ -35,12 +39,17 @@ TEST_CASE("read_as_stream") {
         StreamElement *first = new_StreamElement(Str, (long) 'H');
         StreamElement *second = new_StreamElement(Str, (long) 'i');
         StreamElement *third = new_StreamElement(Str, (long) '?');
-        StreamElement *fourth = new_StreamElement(Str, (long) '!');        
-        first->next = second; second->next = third; third->next = fourth;
+        StreamElement *fourth = new_StreamElement(Str, (long) '!');
+        first->next = second;
+        second->next = third;
+        third->next = fourth;
 
-        StreamElement *actual = read_string_as_stream(a_string);     
+        StreamElement *actual = read_string_as_stream(a_string);
 
         REQUIRE(is_equal(actual, first));
+
+        free_StreamElement(first);
+        free_StreamElement(actual);
     }
 
 }
@@ -52,7 +61,7 @@ TEST_CASE("map") {
         StreamElement *first = new_StreamElement(Num, 10l);
         StreamElement *second = new_StreamElement(Num, 20l);
         first->next = second;
-        auto **args = (char**) malloc(ARG_LEN);
+        auto **args = (char **) malloc(ARG_LEN);
         args[0] = (char *) "a";
         char func_body[] = "add:5:a";
         Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
@@ -64,14 +73,15 @@ TEST_CASE("map") {
         expectedFirst->next = expectedSecond;
         REQUIRE(is_equal(expectedFirst, first));
         REQUIRE(result == 0);
-        free(lambda);
+
+        free_Lambda(lambda);
     }
 
     SECTION("applies print string to all elements of the stream: 1 argument") {
         StreamElement *first = new_StreamElement(Str, (long) 'H');
         StreamElement *second = new_StreamElement(Str, (long) 'i');
         first->next = second;
-        auto **args = (char**) malloc(ARG_LEN);
+        auto **args = (char **) malloc(ARG_LEN);
         args[0] = (char *) "a";
         char func_body[] = "prints:a";
         Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
@@ -83,14 +93,15 @@ TEST_CASE("map") {
         expectedFirst->next = expectedSecond;
         REQUIRE(is_equal(expectedFirst, first));
         REQUIRE(result == 0);
-        free(lambda);
+
+        free_Lambda(lambda);
     }
 
     SECTION("applies print integer to all elements of the stream: 1 argument") {
         StreamElement *first = new_StreamElement(Num, 10l);
         StreamElement *second = new_StreamElement(Num, 20l);
         first->next = second;
-        auto **args = (char**) malloc(ARG_LEN);
+        auto **args = (char **) malloc(ARG_LEN);
         args[0] = (char *) "a";
         char func_body[] = "printi:a";
         Lambda *lambda = new_Lambda(new_Arguments(1, args), new_TypedValue(Func, func_body));
@@ -102,7 +113,8 @@ TEST_CASE("map") {
         expectedFirst->next = expectedSecond;
         REQUIRE(is_equal(expectedFirst, first));
         REQUIRE(result == 0);
-        free(lambda);
+
+        free_Lambda(lambda);
     }
 
 }
@@ -110,15 +122,19 @@ TEST_CASE("map") {
 TEST_CASE("interpret") {
 
     SECTION("prints hello world") {
-       Stream *stream = parse("../test/core/helloworld.du");
+        Stream *stream = parse("../test/core/helloworld.du");
 
-       REQUIRE(interpret(stream) == 0);
-   }
+        REQUIRE(interpret(stream) == 0);
 
-   SECTION("prints a list of integers added five") {
+        free_Stream(stream);
+    }
+
+    SECTION("prints a list of integers added five") {
         Stream *stream = parse("../test/core/map.du");
 
-       REQUIRE(interpret(stream) == 0);
-   }
+        REQUIRE(interpret(stream) == 0);
+
+        free_Stream(stream);
+    }
 
 }
