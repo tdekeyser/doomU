@@ -4,7 +4,7 @@
 
 #include "../../include/str_utils.h"
 #include "../../include/parser.h"
-#include "config.c"
+#include "../../include/config.h"
 
 
 Arguments *tokenize_arguments(char *buffer) {
@@ -12,12 +12,10 @@ Arguments *tokenize_arguments(char *buffer) {
 
     char arg_str[VAR_LEN * ARG_LEN];
     char **args = (char **) malloc(ARG_LEN);
-    if (!args) {
-        fprintf(stderr, OOM);
-    }
+    MEM_ERROR(args);
 
     slice_until(PAREN_CLOSED, buffer, arg_str);
-    assert((length(buffer) > 0)); // Syntax error: no closing parentheses found
+    SYNTAX_ERROR((length(buffer) <= 0), "No closing parentheses found.");
 
     size_t n_args = split(COMMA, arg_str, args);
 
@@ -29,6 +27,7 @@ TypedValue *tokenize_returnValue(char *buffer) {
     assert(buffer != NULL);
 
     char *value = (char *) malloc(VAR_LEN);
+    MEM_ERROR(value);
     slice_until(PAREN_CLOSED, buffer, value);
 
     return new_TypedValue(get_type(value), value);
@@ -63,23 +62,11 @@ Stream *tokenize_stream(char *buffer) {
 
 
 // TODO fails if file is larger than BUFFER
-Stream *parse(string filename) {
-    assert(filename != NULL);
+Stream *parse(FILE *file) {
+    assert(file != NULL);
 
     char buffer[BUFFER + 1];
-    FILE *file = fopen(filename, "r");
-
-    if (file) {
-
-        while ((fread(buffer, sizeof(char), BUFFER, file)) > 0) {
-            strip_leave_quotes(buffer);
-            return tokenize_stream(buffer);
-        }
-
-        fclose(file);
-    } else {
-        fprintf(stderr, "An error occurred while reading file with filename '%s'", filename);
-    }
-
-    return NULL;
+    fread(buffer, sizeof(char), BUFFER, file);
+    strip_leave_quotes(buffer);
+    return tokenize_stream(buffer);
 }

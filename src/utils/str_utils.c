@@ -4,9 +4,10 @@
 #include <ctype.h>
 #include <assert.h>
 #include "../../include/str_utils.h"
+#include "../../include/config.h"
 
 
-size_t length(string str) {
+size_t length(char const *str) {
     assert(str != NULL);
 
     size_t i = 0;
@@ -15,7 +16,7 @@ size_t length(string str) {
 }
 
 
-bool contains(string str, char c) {
+bool contains(char const *str, char c) {
     while (*str++ != STR_NULL) {
         if (*str == c)
             return true;
@@ -24,7 +25,7 @@ bool contains(string str, char c) {
 }
 
 
-bool no_spaces(string str) {
+bool no_spaces(char const *str) {
     assert(str != NULL);
 
     while (*str != STR_NULL) {
@@ -64,20 +65,23 @@ void slice_until(char limit, char *str, char *slice) {
 }
 
 
-size_t split(const char limit, string buffer, char **split) {
+size_t split(char limit, char const *buffer, char **split) {
     assert(buffer != NULL);
     assert(split != NULL);
 
     size_t i = 0;
     char *dup = strdup(buffer);
+    MEM_ERROR(dup);
     char *str = strtok(dup, &limit);
 
     split[i] = NULL;
     while (str != NULL) {
-        split[i++] = str;
+        split[i++] = strdup(str);
+        MEM_ERROR(split[i-1]);
         str = strtok(NULL, &limit);
     }
 
+    free(dup);
     return i;
 }
 
@@ -116,12 +120,8 @@ void strip_leave_quotes(char *str) {
 
 
 long parse_long(char const *str) {
-    char *error;
-    errno = 0;
-    long l = strtoll(str, &error, 0);
-
-    assert(*error == 0);
-    assert(errno == 0);
+    long l = strtol(str, NULL, 0);
+    ERROR_HANDLER(errno != 0, "Could not parse to long: %s", str);
     return l;
 }
 

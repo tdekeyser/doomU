@@ -4,7 +4,7 @@
 #include "function.h"
 
 
-Stream *parse(char const *filename);
+Stream *parse(FILE *file);
 
 
 #endif /* DOOMU_PARSER_H */

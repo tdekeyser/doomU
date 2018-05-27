@@ -6,7 +6,7 @@
 #include "../../include/interpreter.h"
 #include "../../include/operation.h"
 #include "../../include/str_utils.h"
-#include "config.c"
+#include "../../include/config.h"
 
 
 
@@ -53,8 +53,7 @@ StreamElement *read_as_stream(TypedValue *init_operation) {
     if (init_operation->type == Num)
         return read_num_as_stream((char *) init_operation->value);
 
-    assert(false && "Input type not recognized.");
-    return NULL;
+    TYPE_ERROR(true, "Input type not recognized: %i", init_operation->type);
 }
 
 
@@ -68,7 +67,7 @@ size_t parse_operation(char *buffer, char *func_name, char **params) {
 int map(StreamElement *head, Lambda *lambda) {
     assert(head != NULL);
     assert(lambda != NULL);
-    assert(lambda->operation->type == Func);
+    TYPE_ERROR(lambda->operation->type != Func, "Lambda operation must be of type Func: %s", lambda->operation->value);
 
     char func_name[VAR_LEN];
     char *params[ARG_LEN];
@@ -78,7 +77,7 @@ int map(StreamElement *head, Lambda *lambda) {
     do {
 
         long map_params[n_params];
-        for (unsigned int i = 0; i < n_params; i++) {
+        for (int i = 0; i < n_params; i++) {
             if (strcmp(params[i], lambda->args->values[0]) == 0) {
                 // TODO this is a shortcut that prevents using multiple arguments in a lambda!!
                 map_params[i] = tmp->value;
@@ -93,6 +92,8 @@ int map(StreamElement *head, Lambda *lambda) {
 
     } while ((tmp = tmp->next) != NULL);
 
+    for (int i = 0; i < n_params; i++)
+        free(params[i]);
     return 0;
 }
 

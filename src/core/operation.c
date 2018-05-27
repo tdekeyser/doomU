@@ -3,6 +3,7 @@
 #include <assert.h>
 
 #include "../../include/operation.h"
+#include "../../include/config.h"
 
 
 static size_t n_functions = 6;
@@ -24,7 +25,7 @@ Operation lookup(char const *func_name) {
             return functions[i].operation;
     }
 
-    assert(false && "Function name not found.");
+    ERROR_HANDLER(true, "Function name not found: %s", func_name);
     return NULL;
 }
 

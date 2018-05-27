@@ -25,7 +25,7 @@ TEST_CASE("tokenize_arguments") {
 
     SECTION("splits a stripped string into a list of argument tokens") {
         char snip[] = "arg1,arg2):return";
-        string expected[] = { "arg1", "arg2" };
+        char const *expected[] = { "arg1", "arg2" };
 
         Arguments *args = tokenize_arguments(snip);
 
@@ -83,6 +83,8 @@ TEST_CASE("tokenize_returnValue") {
 
         REQUIRE(returnValue->type == Func);
         REQUIRE(strcmp(returnValue->value, "print:a:b") == 0);
+
+        free_TypedValue(returnValue);
     }
 
 }
@@ -91,9 +93,10 @@ TEST_CASE("tokenize_returnValue") {
 TEST_CASE("parse") {
 
     SECTION("tokenizes a file as a stream of lambdas") {
-        string filename = "../test/core/helloworld.du";
+        FILE *file = fopen("../test/core/helloworld.du", "r");
+        assert(file);
 
-        Stream *actual = parse(filename);
+        Stream *actual = parse(file);
 
         REQUIRE(strcmp(actual->name, "main") == 0);
         REQUIRE(actual->lambdas[0]->args->values[0] == NULL);
@@ -101,6 +104,9 @@ TEST_CASE("parse") {
         REQUIRE(strcmp(actual->lambdas[1]->args->values[0], "a") == 0);
         REQUIRE(strcmp(actual->lambdas[1]->operation->value, "prints:a") == 0);
         REQUIRE(actual->n_lambdas == 2);
+
+        free_Stream(actual);
+        fclose(file);
     }
 
 }

@@ -73,8 +73,6 @@ TEST_CASE("map") {
         expectedFirst->next = expectedSecond;
         REQUIRE(is_equal(expectedFirst, first));
         REQUIRE(result == 0);
-
-        free_Lambda(lambda);
     }
 
     SECTION("applies print string to all elements of the stream: 1 argument") {
@@ -93,8 +91,6 @@ TEST_CASE("map") {
         expectedFirst->next = expectedSecond;
         REQUIRE(is_equal(expectedFirst, first));
         REQUIRE(result == 0);
-
-        free_Lambda(lambda);
     }
 
     SECTION("applies print integer to all elements of the stream: 1 argument") {
@@ -113,8 +109,6 @@ TEST_CASE("map") {
         expectedFirst->next = expectedSecond;
         REQUIRE(is_equal(expectedFirst, first));
         REQUIRE(result == 0);
-
-        free_Lambda(lambda);
     }
 
 }
@@ -122,19 +116,25 @@ TEST_CASE("map") {
 TEST_CASE("interpret") {
 
     SECTION("prints hello world") {
-        Stream *stream = parse("../test/core/helloworld.du");
+        FILE *file = fopen("../test/core/helloworld.du", "r");
+        assert(file);
+        Stream *stream = parse(file);
 
         REQUIRE(interpret(stream) == 0);
 
         free_Stream(stream);
+        fclose(file);
     }
 
     SECTION("prints a list of integers added five") {
-        Stream *stream = parse("../test/core/map.du");
+        FILE *file = fopen("../test/core/map.du", "r");
+        assert(file);
+        Stream *stream = parse(file);
 
         REQUIRE(interpret(stream) == 0);
 
         free_Stream(stream);
+        fclose(file);
     }
 
 }

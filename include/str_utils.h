@@ -15,20 +15,18 @@
 #define SQUARE_BRACKET_CLOSED ']'
 
 
-typedef char const *string;
 
+size_t length(char const *);
 
-size_t length(string);
+bool contains(char const *, char);
 
-bool contains(string, char);
-
-bool no_spaces(string);
+bool no_spaces(char const *);
 
 void skip_until(char limit, char *str);
 
 void slice_until(char limit, char *str, char *slice);
 
-size_t split(char limit, string buffer, char **split);
+size_t split(char limit, char const *buffer, char **split);
 
 void strip(char *);
 

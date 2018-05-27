@@ -20,13 +20,13 @@ TEST_CASE("length") {
 TEST_CASE("contains") {
 
     SECTION("returns true if char is in string") {
-        REQUIRE(contains((string) "this is a string with a, comma", COMMA) == true);
-        REQUIRE(contains((string) "here is the a", 'a') == true);        
+        REQUIRE(contains((char const *) "this is a string with a, comma", COMMA));
+        REQUIRE(contains((char const *) "here is the a", 'a'));
     }
 
     SECTION("false if char not in string") {
-        REQUIRE_FALSE(contains((string) "no comma here", COMMA));
-        REQUIRE_FALSE(contains((string) "neither a colon there", COLON));        
+        REQUIRE_FALSE(contains((char const *) "no comma here", COMMA));
+        REQUIRE_FALSE(contains((char const *) "neither a colon there", COLON));
     }
 
 }
@@ -114,7 +114,7 @@ TEST_CASE("split") {
 
     SECTION("splits a string on a delimiter") {
         char a_string[] = "guitar, drums, keyboards";
-        string split_string[] = {"guitar", " drums", " keyboards"};
+        char const *split_string[] = {"guitar", " drums", " keyboards"};
 
         char *actual[3];
 
@@ -127,7 +127,7 @@ TEST_CASE("split") {
 
     SECTION("returns one element if no delimiter in string") {
         char another_string[] = "guitars are nice";
-        string another_split_string[] = {"guitars are nice"};
+        char const *another_split_string[] = {"guitars are nice"};
 
         char *actual[1];
 
