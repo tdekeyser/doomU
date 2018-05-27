@@ -53,7 +53,7 @@ StreamElement *read_as_stream(TypedValue *init_operation) {
     if (init_operation->type == Num)
         return read_num_as_stream((char *) init_operation->value);
 
-    TYPE_ERROR(true, "Input type not recognized: %i", init_operation->type);
+    TYPE_ERROR(true, "Type error: Input type not recognized: %i", init_operation->type);
 }
 
 
@@ -67,7 +67,7 @@ size_t parse_operation(char *buffer, char *func_name, char **params) {
 int map(StreamElement *head, Lambda *lambda) {
     assert(head != NULL);
     assert(lambda != NULL);
-    TYPE_ERROR(lambda->operation->type != Func, "Lambda operation must be of type Func: %s", lambda->operation->value);
+    TYPE_ERROR(lambda->operation->type != Func, "Type error: Lambda operation must be of type Func: %s", lambda->operation->value);
 
     char func_name[VAR_LEN];
     char *params[ARG_LEN];

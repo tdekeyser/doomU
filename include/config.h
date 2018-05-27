@@ -33,7 +33,7 @@
 
 #define TYPE_ERROR(condition, ...) \
     do { \
-        ERROR_HANDLER((condition && "Type error: %s"), __VA_ARGS__); \
+        ERROR_HANDLER((condition), __VA_ARGS__); \
     } while (0)
 
 
